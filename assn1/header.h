@@ -25,11 +25,11 @@
 
 #define		MAX_NUM_NUMBERS	0x40000000
 
-void 		countWithList(int numNums);
+extern void 		countWithList(int numNums);
 
-void 		countWithTree(int numNumbs);
+extern void 		countWithTree(int numNumbs);
 
-int 		getNextNumber();
+extern int 		getNextNumber();
 
 
 

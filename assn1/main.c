@@ -44,7 +44,9 @@ int		obtainNumberBetween
 {
   char	line[MAX_LINE];
   int	entry;
-
+  
+  printf("Please enter %s between %d and %d: \n", descriptionCPtr);
+  // TODO: finish  
   // YOUR CODE HERE
 }
 
