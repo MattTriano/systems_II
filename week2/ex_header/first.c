@@ -1,12 +1,4 @@
-#include  <stdlib.h>
-#include <stdio.h>
-
-char begin;
-char end;
-
-extern void enterBeginEnd ();
-
-extern void printFromBeginToEnd ();
+#include "header.h"
 
 int main ()
 {

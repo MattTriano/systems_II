@@ -1,8 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-
-extern char begin;
-extern char end;
+#include "header.h"
 
 #define ARRAY_LEN	16
 
