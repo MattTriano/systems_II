@@ -27,9 +27,12 @@
 
 extern void 		countWithList(int numNums);
 
-extern void 		countWithTree(int numNumbs);
+extern void 		countWithTree(int numNums);
 
 extern int 		getNextNumber();
 
+extern int 		lowest;
 
+extern int              highest;
 
+extern int 		numNums;

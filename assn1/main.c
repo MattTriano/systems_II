@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------------*
- *---								 	---*
+ *---	j							 	---*
  *---				main.c					---*
  *---									---*
  *---    This file defines the functions getNextNumber(),		---*
@@ -43,9 +43,16 @@ int		obtainNumberBetween
 				)
 {
   char	line[MAX_LINE];
+  char *endp;
   int	entry;
   
-  printf("Please enter %s between %d and %d: \n", descriptionCPtr);
+  do
+  {
+    printf("Please enter the %s number in the range (%d - %d): \n", descriptionCPtr, low, high);
+    fgets(line, MAX_LINE, stdin);
+    entry = (int) strtol(line, &endp, 10);
+  } while (entry < low || entry > high);
+  return(entry); 
   // TODO: finish  
   // YOUR CODE HERE
 }
@@ -64,6 +71,7 @@ int		main	()
 {
   int	numNums;
   int	choice;
+  char array[MAX_LINE];
   const char*	msgCPtr= "What would you like to do?\n"
   			 "(1) Count with a list\n"
   			 "(2) Count with a tree\n"
@@ -71,6 +79,21 @@ int		main	()
   			 "Your choice ";
 
   // YOUR CODE HERE
+  do
+  {
+    low = obtainNumberBetween("lowest", RANGE_LOWEST, RANGE_HIGHEST);
+    high = obtainNumberBetween("highest", low, RANGE_HIGHEST);
+    printf("%s (0-2):", msgCPtr);
+    fgets(array, MAX_LINE, stdin);
+    choice = array[0] - 48;
+  } while (choice != 0 && choice != 1 && choice != 2);
+  
+  if (choice == 1) {
+    countWithList(numNums);
+  } 
+  else if (choice == 2) {
+    countWithTree(numNums);
+  } 
 
   return(EXIT_SUCCESS);
 }
