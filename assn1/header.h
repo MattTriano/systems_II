@@ -35,4 +35,4 @@ extern int 		lowest;
 
 extern int              highest;
 
-extern int 		numNums;
+//extern int 		numNums;
