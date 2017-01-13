@@ -72,6 +72,9 @@ int		main	()
   int	numNums;
   int	choice;
   char array[MAX_LINE];
+  char *endp;
+  char nnArray[MAX_LINE];
+  
   const char*	msgCPtr= "What would you like to do?\n"
   			 "(1) Count with a list\n"
   			 "(2) Count with a tree\n"
@@ -81,13 +84,20 @@ int		main	()
   // YOUR CODE HERE
   do
   {
+    printf("Please enter the number of numbers to consider (%d - %d): ", MIN_NUM_NUMBERS, MAX_NUM_NUMBERS);
+    fgets(nnArray, MAX_LINE, stdin);
+    numNums = (int) strtol(nnArray, &endp, 10);
+  } while (numNums < MIN_NUM_NUMBERS || numNums > MAX_NUM_NUMBERS);
+
+  do
+  {
     low = obtainNumberBetween("lowest", RANGE_LOWEST, RANGE_HIGHEST);
     high = obtainNumberBetween("highest", low, RANGE_HIGHEST);
     printf("%s (0-2):", msgCPtr);
     fgets(array, MAX_LINE, stdin);
     choice = array[0] - 48;
   } while (choice != 0 && choice != 1 && choice != 2);
-  
+       
   if (choice == 1) {
     countWithList(numNums);
   } 
