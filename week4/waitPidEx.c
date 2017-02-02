@@ -32,6 +32,8 @@ int main ()
 
 		if (WIFEXITED(status))
 			printf("Child $%d ended with status %d\n", 
-			  childPid, WEXITSTATUS(status);
+			  childPid, WEXITSTATUS(status));
 		else 
 			printf("Child %d ended abnormally\n", childPid);
+	}
+}
