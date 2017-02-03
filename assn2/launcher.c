@@ -4,16 +4,14 @@ pid_t 	answererPid;
 pid_t 	guesserPid;
 int 	shouldRun	= 1;
 
-void 	sigAlarmHandler (int sigInt
-			)
+void 	sigAlrmHandler (int sigInt)
 {
-	shouldRun	= 0;
 	kill(answererPid, TIME_OVER_SIGNAL);
 	kill(guesserPid, TIME_OVER_SIGNAL);
+	shouldRun 	= 0;
 }
 
-void 	sigChldHandler(int sigInt
-		       )
+void 	sigChldHandler(int sigInt)
 {
 	pid_t		pid;
 	int 		s;
@@ -21,17 +19,25 @@ void 	sigChldHandler(int sigInt
 	shouldRun 	= 0;
 }
 	
-}
+
 
 int 	main ()
 {
-	char			line[MAX_LINE];
-	struct 	sigaction	act;
+	char			line[LINE_LEN];
+	struct 	sigaction	actC;
+	struct  sigaction       actA;	
+
+	memset(&actC, '\0', sizeof(actC));
+	actC.sa_handler = sigChldHandler;
+	actC.sa_flags = SA_NOCLDSTOP | SA_RESTART;
+	sigaction(SIGCHLD, &actC, NULL);
+
+	memset(&actA, '\0', sizeof(actA));
+        actA.sa_handler = sigAlrmHandler;
+        actA.sa_flags = SA_NOCLDSTOP | SA_RESTART;
+        sigaction(SIGCHLD, &actA, NULL);
 	
-	memset(&act, '\0', sizeof(act));
-	act.sa_handler = sigChldHandler;
-	act.sa_flags = SA_NOCLDSTOP | SA_RESTART;
-	sigaction(SIGCHLD, &act, NULL);
-		
+	answererPid = fork();	
+			
 }
     
