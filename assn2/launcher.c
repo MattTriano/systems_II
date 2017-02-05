@@ -35,9 +35,23 @@ int 	main ()
 	memset(&actA, '\0', sizeof(actA));
         actA.sa_handler = sigAlrmHandler;
         actA.sa_flags = SA_NOCLDSTOP | SA_RESTART;
-        sigaction(SIGCHLD, &actA, NULL);
+        sigaction(SIGALRM, &actA, NULL);
 	
-	answererPid = fork();	
-			
+	pid_t childPid = fork();
+	printf("the pid for childPid is %d\n", getpid());	
+	
+	if (childPid == 0) {
+		printf("the pid for the process when childPid = 0 is %d\n", getpid());
+//		exec("ANSWERER_PROGNAME",);
+	}	
+	
+//	while (shouldRun)
+//		sleep(1);
+	
+	sleep(1);
+	sleep(1);
+	
+	printf("launcher finished\n");
+	return(EXIT_SUCCESS);			
 }
     
