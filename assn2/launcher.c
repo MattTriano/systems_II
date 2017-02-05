@@ -44,8 +44,8 @@ int main ()
 	if (childPid == 0) {
 		answererPid = getpid();
 		printf("the pid for the process when childPid = 0 is %d\n", answererPid);
-		exec("ANSWERER_PROGNAME","ANSWERER_PROGNAME", NULL);
-		fprintf(stderr, "Couldn not find %s\n", "ANSWERER_PROGNAME");
+		execl(ANSWERER_PROGNAME,ANSWERER_PROGNAME, NULL);
+		fprintf(stderr, "Could not find %s\n", ANSWERER_PROGNAME);
 		exit(EXIT_FAILURE);
 	}	
 	
@@ -54,10 +54,14 @@ int main ()
 	if (WIFEXITED(status)) 	{
 		guesserPid = getpid();
 		printf("the pid for the process when childPid != 0 is %d\n", guesserPid);
+		snprintf(line, LINE_LEN, "%d", answererPid);
+		execl(GUESSER_PROGNAME, GUESSER_PROGNAME, line, NULL);
+		fprintf(stderr, "Could not find %s\n", GUESSER_PROGNAME);
+		exit(EXIT_FAILURE);
 	}
 
-	//while (shouldRun)
-	//sleep(1);
+//	while (shouldRun)
+//		sleep(1);
 
 	sleep(1);
 	sleep(1);
