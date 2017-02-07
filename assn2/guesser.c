@@ -20,8 +20,7 @@ void 	sigGuessHandler(int success) {
 }
 
 int main (int argc, char* argv[]) 
-{	int 			guess;
-	
+{	
 	char 			line[LINE_LEN];
 	struct 	sigaction	actTime;
 	struct 	sigaction	actWin;
@@ -59,7 +58,7 @@ int main (int argc, char* argv[])
 	while(shouldRun) {
 		printf("What would you like your next guess to be: 0 or 1? \n");
 		fgets(line, LINE_LEN, stdin);
-		guess = (int) strtol(line, NULL, 10);
+		guess = strtol(line, NULL, 10);
 		if (guess == 1)
 			kill(answererPid, ONE_SIGNAL);
 		else if (guess == 0)
@@ -70,5 +69,6 @@ int main (int argc, char* argv[])
 		
 	printf("guesser finished\n");
 	return(EXIT_SUCCESS);
+	}
 }
 
