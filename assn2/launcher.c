@@ -31,6 +31,7 @@ int main ()
 	char			line[LINE_LEN];
 	struct 	sigaction	actC;
 	struct  sigaction       actA;
+	int 			status = 1;	
 
 	memset(&actC, '\0', sizeof(actC));
 	actC.sa_handler = sigChldHandler;
@@ -43,8 +44,9 @@ int main ()
         sigaction(SIGALRM, &actA, NULL);
 
 	pid_t childPid1 = fork();
-
+	printf("childPid1 = %d (l47, lau) \n", childPid1);
 	if (childPid1 == 0) {
+		status = 0;
 		answererPid = getpid();
 		printf("the pid for the answerer process is %d (line49, launcher)\n", answererPid);
 		execl(ANSWERER_PROGNAME,ANSWERER_PROGNAME, NULL);
@@ -53,12 +55,13 @@ int main ()
 	}	
 
 	alarm(NUM_SECONDS);
-
+//	waitpid(answererPid, &status, 0);
 	pid_t childPid2 = fork();	
 
 	if (childPid2 == 0) {
 		guesserPid = getpid();
-		printf("the pid for the guesser process is %d (line61, lanucher)\n", guesserPid);
+		printf("the pid for the answer process is %d (line61, launcher)\n", answererPid);
+		printf("the pid for the guesser process is %d (line62, lanucher)\n", guesserPid);
 		snprintf(line, LINE_LEN, "%d", answererPid);
 		execl(GUESSER_PROGNAME, GUESSER_PROGNAME, line, NULL);
 		fprintf(stderr, "Could not find %s\n", GUESSER_PROGNAME);

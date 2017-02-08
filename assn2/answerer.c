@@ -65,7 +65,7 @@ void    guessHandler  (int    sig,
     numCorrect  = 0;
     toSendBack  = INCORRECT_SIGNAL;
   }
-
+  printf("Answerer, sending %d over to guesser! (line68) \n", infoPtr->si_pid);
   kill(infoPtr->si_pid, toSendBack);
 }
 
