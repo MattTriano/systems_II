@@ -48,8 +48,8 @@ void    guessHandler  (int    sig,
   int isCorrect = (correctBit == userBit);
 
   printf("position %d: userBit %d, correctBit %d\n",
-   	numCorrect, userBit, correctBit
-  	);
+   numCorrect, userBit, correctBit
+  );
 
   if  (isCorrect)
   {
@@ -80,11 +80,6 @@ int   main    (int  argc,
   srand(getpid());
 
   answer  = rand() % (1 << PATTERN_LEN);
-  
-  int i;
-  for (i = 0; i < argc; i++) {
-                printf("(answerer line51) argv[%d] = %s\n", i, argv[i]);
-        }
 
 printf("(The answer is %d)\n",answer);
 
@@ -99,7 +94,7 @@ printf("(The answer is %d)\n",answer);
   act.sa_sigaction  = guessHandler;
   sigaction(ZERO_SIGNAL,&act,NULL);
   sigaction(ONE_SIGNAL,&act,NULL);
-	
+
   //  II.C.  Hand out while game still active:
   while  ( (numCorrect < PATTERN_LEN)  &&  shouldRun )
     sleep(1);

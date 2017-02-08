@@ -24,23 +24,22 @@
 
 //---   Common constants:         ---//
 
-#define   ZERO_SIGNAL   SIGUSR1
+#define   ZERO_SIGNAL   	SIGUSR1
 
-#define   ONE_SIGNAL    SIGUSR2
+#define   ONE_SIGNAL    	SIGUSR2
 
-#define   CORRECT_SIGNAL    SIGUSR1
+#define   CORRECT_SIGNAL    	SIGUSR1
 
-#define   INCORRECT_SIGNAL  SIGUSR2
+#define   INCORRECT_SIGNAL  	SIGUSR2
 
-#define   WIN_SIGNAL    SIGINT
+#define   WIN_SIGNAL    	SIGINT
 
-#define   TIME_OVER_SIGNAL  SIGTERM
+#define   TIME_OVER_SIGNAL  	SIGTERM
 
-#define   GUESSER_PROGNAME  "guesser"
+#define   GUESSER_PROGNAME  	"guesser"
 
-#define   ANSWERER_PROGNAME "answerer"
+#define   ANSWERER_PROGNAME 	"answerer"
 
-#define   LINE_LEN    256
+#define   LINE_LEN    		256
 
-#define   NUM_SECONDS   5
-
+#define   NUM_SECONDS   	10
