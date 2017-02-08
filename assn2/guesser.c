@@ -29,22 +29,28 @@ int main (int argc, char* argv[])
 	struct	sigaction	actCor;
 	struct 	sigaction	actIncor;
 	int 			guess;
+	int			i;
+	for (i = 0; i < argc; i++) {
+		printf("(guesser line34) argv[%d] = %s\n", i, argv[i]);
+	}
 
-	printf("the argc (line33, guesser) is %d \n", argc);
-	printf("the argv (line34, guesser) is %d \n", *argv[0]);
-	printf("the process id (l37, gue) is %d \n", getpid());
+//	printf("the argc (line33, guesser) is %d \n", argc);
+//	printf("the argv (line34, guesser) is %d \n", *argv[0]);
+//	printf("the process id (line35, guesser) is %d \n", getpid());
 	if (argc < 2) {
 		printf("You only passed %d arguments.  You gotta give me more!\n", argc);
 		return(EXIT_FAILURE);
 	}
 	
 	answererPid = strtol(argv[1], NULL, 10);
-	printf("the answererPid (from line 42 of guesser) is %d \n", answererPid);
+//	printf("the answererPid (from line 42 of guesser) is %d \n", answererPid);
 
 	memset(&actTime, '\0', sizeof(actTime));
 	actTime.sa_handler = sigTimeHandler;
 //	actTime.sa_flags   = SA_NOCLDSTOP | SA_RESTART;
 	sigaction(TIME_OVER_SIGNAL, &actTime, NULL);
+
+	alarm(NUM_SECONDS);
 
 	memset(&actWin, '\0', sizeof(actWin));
         actWin.sa_handler = sigWinHandler;
@@ -60,8 +66,6 @@ int main (int argc, char* argv[])
         actIncor.sa_handler = sigGuessHandler; 
 //      actIncor.sa_flags   = SA_NOCLDSTOP | SA_RESTART;
         sigaction(INCORRECT_SIGNAL, &actIncor, NULL);
-
-	alarm(NUM_SECONDS);
 
 	while(shouldRun) {
 		printf("What would you like your next guess to be: 0 or 1? \n");

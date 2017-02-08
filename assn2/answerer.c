@@ -80,6 +80,11 @@ int   main    (int  argc,
   srand(getpid());
 
   answer  = rand() % (1 << PATTERN_LEN);
+  
+  int i;
+  for (i = 0; i < argc; i++) {
+                printf("(answerer line51) argv[%d] = %s\n", i, argv[i]);
+        }
 
 printf("(The answer is %d)\n",answer);
 

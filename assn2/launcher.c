@@ -45,7 +45,7 @@ int main ()
 
 	pid_t childPid1 = fork();
 	printf("childPid1 = %d (l47, lau) \n", childPid1);
-	if (childPid1 == 0) {
+	if (childPid1 > 0) {
 		status = 0;
 		answererPid = getpid();
 		printf("the pid for the answerer process is %d (line49, launcher)\n", answererPid);
