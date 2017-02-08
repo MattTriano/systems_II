@@ -78,7 +78,7 @@ int   main    (int  argc,
   //  II.  Run program:
   //  II.A.  Initialize random number generator and choice:
   srand(getpid());
-
+  printf("entered answerer (line81)\n");
   answer  = rand() % (1 << PATTERN_LEN);
 
 printf("(The answer is %d)\n",answer);

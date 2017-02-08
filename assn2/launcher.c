@@ -41,9 +41,11 @@ int main ()
 //        actA.sa_flags = SA_NOCLDSTOP | SA_RESTART;
         sigaction(SIGALRM, &actA, NULL);
 
+//	answererPid = 0;
+
 	pid_t childPid1 = fork();
 	printf("childPid1 = %d (l47, lau) \n", childPid1);
-	if (childPid1 == 0) {
+	if (childPid1 < 0) {
 		status = 0;
 		answererPid = getpid();
 		printf("the pid for the answerer process is %d (line49, launcher)\n", answererPid);
@@ -51,6 +53,10 @@ int main ()
 		fprintf(stderr, "Could not find %s\n", ANSWERER_PROGNAME);
 		exit(EXIT_FAILURE);
 	}
+
+//	while (answererPid == 0) 
+//		sleep(1);
+//		printf("waiting for answerPid\n");
 
 	alarm(NUM_SECONDS);
 //	waitpid(answererPid, &status, 0);
