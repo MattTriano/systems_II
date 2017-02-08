@@ -94,7 +94,7 @@ printf("(The answer is %d)\n",answer);
   act.sa_sigaction  = guessHandler;
   sigaction(ZERO_SIGNAL,&act,NULL);
   sigaction(ONE_SIGNAL,&act,NULL);
-
+	
   //  II.C.  Hand out while game still active:
   while  ( (numCorrect < PATTERN_LEN)  &&  shouldRun )
     sleep(1);

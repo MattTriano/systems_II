@@ -28,10 +28,15 @@ int main (int argc, char* argv[])
 	struct 	sigaction	actIncor;
 	int 			guess;
 
-	if (argc < 2)
+	printf("do we get into the guesser? line31 \n");
+
+	printf("the process id is %d \n", argc);
+
+	if (argc < 2) {
 		printf("You only passed %d arguments.  You gotta give me more!\n", argc);
 		return(EXIT_FAILURE);
-	
+	}
+	printf("do we make it pass the exit_failure in guesser? line37 \n");	
 	pid_t answererPid = strtol(argv[1], NULL, 10);
 
 	memset(&actTime, '\0', sizeof(actTime));
@@ -50,8 +55,7 @@ int main (int argc, char* argv[])
         sigaction(CORRECT_SIGNAL, &actCor, NULL);
 
 	memset(&actIncor, '\0', sizeof(actIncor));
-        actIncor.sa_handler = sigGuessHandler;
-		guess = 
+        actIncor.sa_handler = sigGuessHandler; 
         actIncor.sa_flags   = SA_NOCLDSTOP | SA_RESTART;
         sigaction(INCORRECT_SIGNAL, &actIncor, NULL);
 
@@ -66,9 +70,9 @@ int main (int argc, char* argv[])
 		else
 			kill(answererPid, INCORRECT_SIGNAL);
 		sleep(1);
-		
+	}	
 	printf("guesser finished\n");
 	return(EXIT_SUCCESS);
-	}
+	
 }
 
