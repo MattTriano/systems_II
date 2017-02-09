@@ -42,4 +42,4 @@
 
 #define   LINE_LEN    		256
 
-#define   NUM_SECONDS   	10
+#define   NUM_SECONDS   	30

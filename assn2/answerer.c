@@ -66,6 +66,8 @@ void    guessHandler  (int    sig,
     toSendBack  = INCORRECT_SIGNAL;
   }
   printf("Answerer, sending %d over to guesser! (line68) \n", infoPtr->si_pid);
+  printf("I, Answerer, was called by process %d (line69) \n", getppid());
+  printf("I, Answerer, am on process %d (line70) \n", getpid());
   kill(infoPtr->si_pid, toSendBack);
 }
 
