@@ -15,10 +15,10 @@ void sigChldHandler(int sigInt) {
 	pid_t	pid;
 	int 	s;
 	while((pid = waitpid(-1, &s, WNOHANG)) > 0) {
-		if (WIFEXITED(s) != 0)
-			printf("%d returned %d\n", pid, WEXITSTATUS(s));
-		else
-			printf("%d crashed!\n", pid);
+//		if (WIFEXITED(s) != 0)
+//			printf("%d returned %d\n", pid, WEXITSTATUS(s));
+//		else
+//			printf("%d crashed!\n", pid);
 		}
 	shouldRun = 0;
 }
@@ -28,7 +28,6 @@ int main ()
 	char			line[LINE_LEN];
 	struct 	sigaction	actC;
 	struct  sigaction       actA;
-	int 			status = 1;
 
 	memset(&actC, '\0', sizeof(actC));
 	actC.sa_handler = sigChldHandler;
@@ -44,45 +43,20 @@ int main ()
 
 	answererPid = fork();
 	if (answererPid == 0) {
-		status = 0;
-		answererStarted = 1;
 		answererPid = getpid();
-		printf("the pid for the answerer process is %d (line49, launcher)\n", answererPid);
 		execl(ANSWERER_PROGNAME,ANSWERER_PROGNAME, NULL);
 		fprintf(stderr, "Could not find %s\n", ANSWERER_PROGNAME);
 		exit(EXIT_FAILURE);
 	}
 
-//	if (answererStarted == 1) {
-//		answererPid = answererPid - 1;
-//	}
-
-
-//	while (answererPid == 0) 
-//		sleep(1);
-//		printf("waiting for answerPid\n")
-
-//	waitpid(answererPid, &status, 0);
 	guesserPid = fork();
 
 	if (guesserPid == 0) {
-//		guesserPid = getpid();
-		printf("the pid for the answer process is %d (line61, launcher)\n", answererPid);
-		printf("the pid for the guesser process is %d (line62, lanucher)\n", guesserPid);
 		snprintf(line, LINE_LEN, "%d", answererPid);
 		execl(GUESSER_PROGNAME, GUESSER_PROGNAME, line, NULL);
 		fprintf(stderr, "Could not find %s\n", GUESSER_PROGNAME);
 		exit(EXIT_FAILURE);
 	}
-
-//	if (WIFEXITED(status)) {
-//		guesserPid = getpid();
-//		printf("the pid for the process when childPid != 0 is %d\n", guesserPid);
-//		snprintf(line, LINE_LEN, "%d", answererPid);
-//		execl(GUESSER_PROGNAME, GUESSER_PROGNAME, line, NULL);
-//		fprintf(stderr, "Could not find %s\n", GUESSER_PROGNAME);
-//		exit(EXIT_FAILURE);
-//}
 
 	while (shouldRun)
 		sleep(1);
