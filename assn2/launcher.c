@@ -42,9 +42,8 @@ int main ()
 
 	alarm(NUM_SECONDS);
 
-	pid_t childPid1 = fork();
-	printf("childPid1 = %d (l47, lau) \n", childPid1);
-	if (childPid1 < 0) {
+	answererPid = fork();
+	if (answererPid == 0) {
 		status = 0;
 		answererStarted = 1;
 		answererPid = getpid();
@@ -54,9 +53,9 @@ int main ()
 		exit(EXIT_FAILURE);
 	}
 
-	if (answererStarted == 1) {
-		answererPid = answererPid - 1;
-	}
+//	if (answererStarted == 1) {
+//		answererPid = answererPid - 1;
+//	}
 
 
 //	while (answererPid == 0) 
@@ -64,17 +63,17 @@ int main ()
 //		printf("waiting for answerPid\n")
 
 //	waitpid(answererPid, &status, 0);
-//	pid_t childPid2 = fork();
+	guesserPid = fork();
 
-//	if (childPid2 == 0) {
-		guesserPid = getpid();
+	if (guesserPid == 0) {
+//		guesserPid = getpid();
 		printf("the pid for the answer process is %d (line61, launcher)\n", answererPid);
 		printf("the pid for the guesser process is %d (line62, lanucher)\n", guesserPid);
 		snprintf(line, LINE_LEN, "%d", answererPid);
 		execl(GUESSER_PROGNAME, GUESSER_PROGNAME, line, NULL);
 		fprintf(stderr, "Could not find %s\n", GUESSER_PROGNAME);
 		exit(EXIT_FAILURE);
-//	}
+	}
 
 //	if (WIFEXITED(status)) {
 //		guesserPid = getpid();

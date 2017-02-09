@@ -46,7 +46,7 @@ int main (int argc, char* argv[])
 	//actTime.sa_flags   = SA_NOCLDSTOP | SA_RESTART;
 	sigaction(TIME_OVER_SIGNAL, &actTime, NULL);
 
-	alarm(NUM_SECONDS);
+//	alarm(NUM_SECONDS);
 
 	memset(&actWin, '\0', sizeof(actWin));
         actWin.sa_handler = sigWinHandler;
@@ -64,15 +64,13 @@ int main (int argc, char* argv[])
         sigaction(INCORRECT_SIGNAL, &actIncor, NULL);
 
 	while(shouldRun) {
-	printf("What would you like your next guess to be: 0 or 1? \n");
-	fgets(line, LINE_LEN, stdin);
-	guess = strtol(line, NULL, 10);
-	if (guess == 1)
-		kill(answererPid, ONE_SIGNAL);
-	else if (guess == 0)
-		kill(answererPid, ZERO_SIGNAL);
-	else
-		kill(answererPid, INCORRECT_SIGNAL);
+		printf("What would you like your next guess to be: 0 or 1? \n");
+		fgets(line, LINE_LEN, stdin);
+		guess = strtol(line, NULL, 10);
+		if (guess == 1)
+			kill(answererPid, ONE_SIGNAL);
+		else if (guess == 0)
+			kill(answererPid, ZERO_SIGNAL);
 		sleep(2);
 	}
 	printf("guesser finished\n");
