@@ -91,6 +91,8 @@ class 	DigestiveOrgan
   //  I.  Member vars:
   //  PURPOSE:  To hold the name of '*this' organ.
   std::string	 		name_;
+  pthread_mutex_t 		organLock_;
+  pthread_cond_t 		notFull_;  
 
   //  PURPOSE:  To tell the maximum number of meals that '*this' organ can hold.
   int  				maxCapacity_;
@@ -125,12 +127,16 @@ public :
 	 	maxCapacity_(newCapacity),
 	 	currentNumMeals_(0)
 		{
+                  pthread_mutex_init(&organLock_, NULL);
+                  pthread_cond_init(&notFull_, NULL); 
 		}
 
   //  PURPOSE:  To release the resources of '*this'.  No parameters.  No return
   //value.
   ~DigestiveOrgan()
   		 {
+                   pthread_mutex_destroy(&organLock_);
+                   pthread_cond_destroy(&notFull_);
 		 }
 
   //  V.  Accessors:
@@ -170,10 +176,11 @@ public :
   void 		enter(const char*  	mealCPtr
 		     )
   {
-
+    pthread_mutex_lock(&organLock_);
     while  (getCurrentNumMeals() >= getMaxCapacity())
     {
       printf("%s is being held up in the %s\n",mealCPtr,getName().c_str());
+      pthread_cond_wait(&notFull_, &organLock_);
     }
 
     currentNumMeals_++;
@@ -186,6 +193,7 @@ public :
     }
 
     printf("The %s is entering the %s\n",mealCPtr,getName().c_str());
+    pthread_mutex_unlock(&organLock_);
   }
 
   //  PURPOSE:  To make the food named 'mealCPtr' leave '*this' DigestiveOrgan.
@@ -193,6 +201,7 @@ public :
   void 		leave(const char* 	mealCPtr
   		     )
   {
+    pthread_mutex_lock(&organLock_);
     currentNumMeals_--;
 
     if  (getCurrentNumMeals() < 0)
@@ -205,7 +214,8 @@ public :
     }
 
     printf("The %s is leaving the %s\n",mealCPtr,getName().c_str());
-
+    pthread_mutex_unlock(&organLock_);
+    pthread_cond_signal(&notFull_);
   }
 
 };
@@ -217,7 +227,8 @@ class 		Diaper
   //  I.  Member vars:
   //  PURPOSE:  To tell the total number of meals that have been "deposited"
   //into '*this' Diaper.
-  int 		loadCount_;
+  int 			 	loadCount_;
+  pthread_mutex_t 	 	diaperLock_;
 
   //  II.  Disallowed auto-generated methods:
   //  No copy constructor:
@@ -237,12 +248,14 @@ public :
   Diaper			() :
   			 	loadCount_(0)
  				{
+                                  pthread_mutex_init(&diaperLock_, NULL);
 			 	}
 
   //  PURPOSE:  To release the resources of '*this'.  No parameters.  No return
   //value.
   ~Diaper			()
   			 	{
+                                  pthread_mutex_destroy(&diaperLock_);
  				}
 
   //  V.  Accessors:
@@ -258,15 +271,19 @@ public :
   void   makeDeposit		(const char* 	mealNameCPtr
 			 	)
 		 		{
+                                  pthread_mutex_lock(&diaperLock_);
  				  printf("(%s entering diaper)\n",mealNameCPtr);
 				  loadCount_++;
+                                  pthread_mutex_unlock(&diaperLock_);
 				}
 
   //  PURPOSE:  To replace '*this' Diaper with a clean one.  No parameters.
   //No return value.
   void   replace		()
  				{
+                                  pthread_mutex_lock(&diaperLock_);
 				  loadCount_= 0;
+                                  pthread_mutex_unlock(&diaperLock_);
  				}
 
 
@@ -471,6 +488,8 @@ int 	main	( int		argc,
 //        printf("That's not a valid option, please enter either 0, 1, or 2 this time: \n");
     } while (choice != 0 && choice != 1 && choice != 2 && shouldRun != 0); 
 
+    if (choice == 0) 
+      shouldRun = 0;
 //    switch (choice) {
 //      case 0:  	shouldRun = 0;
 //                break;
