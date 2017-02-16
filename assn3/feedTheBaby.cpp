@@ -427,7 +427,43 @@ int 	main	( int		argc,
     srand(getpid());
 
   //  YOUR CODE HERE
+  pthread_t 		tId;
+  pthread_t 		dtId;
+  pthread_attr_t        dtAttr;
+  char 			line[MAX_LINE];
+  char                  food[MAX_LINE]
+  int 			choice = NULL;
+  int  		  	shouldRun = 1;
+  
+  pthread_create(&tId, NULL, beTheBaby, NULL);
+  pthread_attr_init(&dtAttr);
+  pthread_attr_setdetachstate(&dtAttr, PTHREAD_CREATE_DETACHED);
+ 
+  do {
+    do {
+      if (choice != NULL)
+        printf("That's not a valid option, please enter either 0, 1, or 2 this time: \n");
+      printf("What's a mother to do? \n"
+           "\t(1) Feed my baby, \n"
+           "\t(2) Change the diapers, \n"
+           "\t(0) Give the baby up for adoption: \n");
+      fgets(line, MAX_LINE, stdin);
+      choice = srttol(line, NULL, 10);
+    } while (choice != 0 || choice != 1 || choice != 2);
 
+    switch (choice) {
+      case 0:  	shouldRun = 0;
+                break;
+      case 1:   food = selectFood();
+                pthread_create(&dtId, &dtAttr, processMeal, &food);
+      case 2:   replaceDiaper();
+                
+  } while (shouldRun);
+
+  pthread_join(tId, NULL);
+  pthread_attr_destroy(&dtAttr);
+
+  // END OF MY CODE  
 
   printf("Mama \"Now you're someone ELSE's problem!\"\n");
   return(EXIT_SUCCESS);
