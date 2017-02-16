@@ -297,8 +297,8 @@ bool 			shouldRun      = true;
 //  PURPOSE:  To randomly choose and return a 'const char*' member from array
 //'array[]' of size 'arraySize'
 const char* 		obtainRandomMessage
-      				(size_tarraySize,
-				 const char*array[]
+      				(size_t  	arraySize,
+				 const char* 	array[]
 			      	)
 {
   return(array[rand() % (arraySize / sizeof(const char*))]);
@@ -431,8 +431,8 @@ int 	main	( int		argc,
   pthread_t 		dtId;
   pthread_attr_t        dtAttr;
   char 			line[MAX_LINE];
-  char                  food[MAX_LINE]
-  int 			choice = NULL;
+  const char*           food;
+  int 			choice;
   int  		  	shouldRun = 1;
   
   pthread_create(&tId, NULL, beTheBaby, NULL);
@@ -440,32 +440,62 @@ int 	main	( int		argc,
   pthread_attr_setdetachstate(&dtAttr, PTHREAD_CREATE_DETACHED);
  
   do {
+    printf("Choice is currently %d \n", choice);
     do {
-      if (choice != NULL)
-        printf("That's not a valid option, please enter either 0, 1, or 2 this time: \n");
       printf("What's a mother to do? \n"
            "\t(1) Feed my baby, \n"
            "\t(2) Change the diapers, \n"
            "\t(0) Give the baby up for adoption: \n");
       fgets(line, MAX_LINE, stdin);
-      choice = srttol(line, NULL, 10);
-    } while (choice != 0 || choice != 1 || choice != 2);
+      choice = strtol(line, NULL, 10);
+//      if (choice == 0) {
+//        shouldRun = 0;
+//        break;
+//      }
+      if (choice == 0) {
+        shouldRun = 0;
+        pthread_join(tId, NULL);
+        break;
+      } 
+      else if (choice == 1) {
+        food = selectFood();
+        pthread_create(&dtId, &dtAttr, processMeal, (void*) &food[0]);
+      }
+      else if (choice == 2) {
+        replaceDiaper();
+      }
+      else {
+        printf("That's not a valid option, please enter either 0, 1, or 2 this time: \n");
+      }
+//      if (choice != 0 && choice != 1 && choice != 2)
+//        printf("That's not a valid option, please enter either 0, 1, or 2 this time: \n");
+    } while (choice != 0 && choice != 1 && choice != 2 && shouldRun != 0); 
 
-    switch (choice) {
-      case 0:  	shouldRun = 0;
-                break;
-      case 1:   food = selectFood();
-                pthread_create(&dtId, &dtAttr, processMeal, &food);
-      case 2:   replaceDiaper();
-                
-  } while (shouldRun);
+//    switch (choice) {
+//      case 0:  	shouldRun = 0;
+//                break;
+//      case 1:   
+//                food = selectFood();
+////                printf("the food is: %p\n", &food);
+//                pthread_create(&dtId, &dtAttr, processMeal, (void*) &food[0]);
+//                break;
+//      case 2:   replaceDiaper();
+//                break;
+//    }            
+  } while (shouldRun == 1);
 
   pthread_join(tId, NULL);
   pthread_attr_destroy(&dtAttr);
-
+  
   // END OF MY CODE  
 
   printf("Mama \"Now you're someone ELSE's problem!\"\n");
   return(EXIT_SUCCESS);
 }
 
+/* If you feed the baby too rapidly, the food will be backed up at some at-capacity organ.
+A notification will repeatedly print until the food in that organ is processed, creating 
+a vacancy for the queued food to fill.
+This will continue until the all organs are below their capacity or at their capacity with
+no queued food.
+*/
