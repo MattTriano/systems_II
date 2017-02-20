@@ -13,13 +13,20 @@ struct  		Word
     struct  Word* 	nextPtr_;
 };
 
-//struct  Word*  		obtainCommaSeparatedList( const char* string) {
-        
-//}
+struct  Word*  		obtainCommaSeparatedList( const char* string) {
+    char*  		charRun = strchr(string, ","); // pointer to next comma
+
+    // want to allocate space from wordBeginning to charRun
+    // want to use strncpy to get text from that length
+    // make a Word object with (copiedText, charRun) as values
+
+            
+}
 
 int main () {
     char 	  	line[MAX_LINE];
     char*  	  	cPtr;
+    char* 	 	charRun;
     struct  Word*  	commaSepList = (struct Word*)malloc(sizeof(struct Word));
 
     printf("Enter the comma-separated words to be delimited: ");
