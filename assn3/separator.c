@@ -14,31 +14,59 @@ struct  		Word
 };
 
 struct  Word*  		obtainCommaSeparatedList( const char* string) {
-    const char 		comma 	 	= ',';
-    char*  		charRun  	= strchr(string, comma); // pointer to next comma
-    char* 		endCond 	= strchr(string, '\0');
-    int 		length 	 	= strlen(string);
-    struct  Word*	toReturn 	= (struct Word*)malloc(sizeof(struct Word));
-    size_t  		wordLen		= (charRun - string + 1);
-    char* 		wordText 	= (char*)malloc(wordLen);
-    char* 		stringRemnant 	= (char*)malloc(length - wordLen);
+    printf("just entered a new iteration, string = %s \n", string);
+    printf("string length = %d \n", strlen(string));
+    char*  		charRun  	= strchr(string, ','); // pointer to next comma
+    size_t 		wordLen;
+    size_t              length          = strlen(string);
+    struct  Word*       toReturn        = (struct Word*)malloc(sizeof(struct Word));
+    char* 		stringRemnant;
+
+    if (charRun != NULL) {
+        charRun  	+= 1;
+        printf("charRun is not NULL \n");
+        wordLen 	= (charRun - string - 1);
+        stringRemnant   = (char*)malloc(length - wordLen);
+        strncpy(stringRemnant, charRun, (length - wordLen + 1));
+    } else {
+        printf("charRun is NULL \n");
+        wordLen  	= length;
+        stringRemnant  	= string;
+    }
+//    int 		length 	 	= strlen(string);
+    printf("right after setting length, length = %d \n", length);
+//    printf("right before setting wordLen: charRun = %s \n", charRun);
+    printf("banal stuff \n");
+//    size_t  		wordLen		= (charRun - string - 1);
+    char* 		wordText 	= (char*)malloc(wordLen+1);
+//    char* 		stringRemnant 	= (char*)malloc(length - wordLen);
         
+    printf("debug: wordLen 		= %d \n", wordLen);
+    printf("debug: stringLength 	= %d \n", length); 
     strncpy(wordText, string, wordLen);
-    strncpy(stringRemnant, charRun, (length - wordLen));    
+    printf("problem not in the wordText assignment \n");
+    printf("charRun = %s \n", charRun);
+//    strncpy(stringRemnant, charRun, (length - wordLen + 1));    
+    printf("Pre recn: length 	    = %d \n", length);
     printf("Pre recn: wordLen       = %d \n", wordLen);    
     printf("Pre recn: wordText      = %s \n", wordText);
     printf("Pre recn: charRun       = %s \n", charRun);
     printf("Pre recn: stringRemnant = %s \n", stringRemnant);  
     toReturn->textPtr_ = wordText;
 
-    if (endCond != NULL && charRun == NULL) {    
+
+    if (charRun == NULL) {
+//    if (endCond != NULL && charRun == NULL) {    
 //        toReturn->textPtr_ = wordText;
+        printf("entering the recursion termination section");
         toReturn->nextPtr_ = NULL ;
         free(stringRemnant);
         free(wordText);
         free(toReturn);
         return(toReturn);
     } else {
+        printf("in rec loop: stringRemnant = %s \n", stringRemnant);
+        printf("in rec loop: remnantLength = %d \n", strlen(stringRemnant));
         toReturn->nextPtr_ = obtainCommaSeparatedList(stringRemnant); // the remainder of the string
         
     }
