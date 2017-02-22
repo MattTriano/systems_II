@@ -445,7 +445,7 @@ int 	main	( int		argc,
         srand(getpid());
 
     //  YOUR CODE HERE
-    pthread_t 		tId;
+    pthread_t 		thread;
     pthread_t 		dtId;
     pthread_attr_t      dtAttr;
     char 		line[MAX_LINE];
@@ -453,9 +453,9 @@ int 	main	( int		argc,
     int 		choice;
     int  		shouldRun = 1;
   
-    pthread_create(&tId, NULL, beTheBaby, NULL);
+    pthread_create(&thread, NULL, beTheBaby, NULL);
     pthread_attr_init(&dtAttr);
-    pthread_attr_setdetachstate(&dtAttr, PTHREAD_CREATE_DETACHED);
+//    pthread_attr_setdetachstate(&dtAttr, PTHREAD_CREATE_DETACHED);
  
     do {
         printf("Choice is currently %d \n", choice);
@@ -471,7 +471,8 @@ int 	main	( int		argc,
                 break;
             } else if (choice == 1) {
                 food = selectFood();
-                pthread_create(&dtId, &dtAttr, processMeal, (void*) &food[0]);
+                pthread_attr_setdetachstate(&dtAttr, PTHREAD_CREATE_DETACHED);
+                pthread_create(&thread, &dtAttr, processMeal, (void*) &food[0]);
             } else if (choice == 2) {
                 replaceDiaper();
             }
@@ -484,36 +485,12 @@ int 	main	( int		argc,
 
     if (choice == 0) {
         shouldRun = 0;
-        pthread_join(tId, NULL);
+//        pthread_join(thread, NULL);
         break;
-      }
-//      else if (choice == 1) {
-//        food = selectFood();
-//        pthread_create(&dtId, &dtAttr, processMeal, (void*) &food[0]);
-//      }
-//      else if (choice == 2) {
-//        replaceDiaper();
-//      }
-
-    printf("Choice = %d \n",choice);
-    if (choice == 0) {
-        shouldRun = 0;
-        break;
-    }
-//    switch (choice) {
-//      case 0:  	shouldRun = 0;
-//                break;
-//      case 1:   
-//                food = selectFood();
-////                printf("the food is: %p\n", &food);
-//                pthread_create(&dtId, &dtAttr, processMeal, (void*) &food[0]);
-//                break;
-//      case 2:   replaceDiaper();
-//                break;
-//    }            
+      }          
   } while (shouldRun == 1);
 
-  pthread_join(tId, NULL);
+  pthread_join(thread, NULL);
   pthread_attr_destroy(&dtAttr);
   
   // END OF MY CODE  
