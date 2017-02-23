@@ -455,8 +455,6 @@ int 	main	( int		argc,
   
     pthread_create(&thread, NULL, beTheBaby, NULL);
     pthread_attr_init(&dtAttr);
-//    pthread_attr_setdetachstate(&dtAttr, PTHREAD_CREATE_DETACHED);
- 
     do {
         printf("Choice is currently %d \n", choice);
         do {
@@ -477,15 +475,11 @@ int 	main	( int		argc,
                 replaceDiaper();
             }
             if (!(choice == 0 || choice == 1 || choice == 2)) 
-                printf("That's not a valid option, please enter either 0, 1, or 2 this time: \n");
-      
-//      if (choice != 0 && choice != 1 && choice != 2)
-//        printf("That's not a valid option, please enter either 0, 1, or 2 this time: \n");
+                printf("That's not a valid option, please enter either 0, 1, or 2 this time: \n");     
     } while (choice != 0 && choice != 1 && choice != 2 && shouldRun != 0); 
 
     if (choice == 0) {
         shouldRun = 0;
-//        pthread_join(thread, NULL);
         break;
       }          
   } while (shouldRun == 1);
@@ -494,7 +488,6 @@ int 	main	( int		argc,
   pthread_attr_destroy(&dtAttr);
   
   // END OF MY CODE  
-
   printf("Mama \"Now you're someone ELSE's problem!\"\n");
   fflush(stdout);
   return(EXIT_SUCCESS);
