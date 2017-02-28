@@ -4,19 +4,20 @@
 
 #define 	BUFFER_LEN 	1024
 
+const 	char 	COMMENT_CHAR 	= '#';
+
 int 	main 	(int 	argc,
   		 char* 	argv[]
 		)
 {
     // Check the argument
-    if (argc < 3)
+    if (argc < 2)
     {
         fprintf(stderr, "Usage:\tlineCounter <string> <filename>\n");
         exit(EXIT_FAILURE);
     }
     // Open the file
-    const char* lookFor = argv[1];
-    const char* filePath = argv[2];
+    const char* filePath = argv[1];
     FILE* filePtr = fopen(filePath, "r");
     
     if (filePtr == NULL)
@@ -32,22 +33,21 @@ int 	main 	(int 	argc,
 
     while (fgets(buffer, BUFFER_LEN, filePtr) != NULL)
     {
-        if (strncmp(buffer, lookFor, lookForLen) == 0)
-            lineNum++;
+        lineNum++;
 
-            char* 	cPtr;
+        char* 	cPtr;
 
-            for (cPtr = buffer;  isspace(*cPtr);  cPtr++);
-            if ( (*cPtr == COMMENT_CHAR || *cPtr == '\0') )
-                continue;
+        for (cPtr = buffer;  isspace(*cPtr);  cPtr++);
+        if ( (*cPtr == COMMENT_CHAR) || (*cPtr == '\0') )
+            continue;
 
-            int i;
-            int j;
+        int i;
+        int j;
 
-            if ( sscanf(cPtr, "%d %d", &i, &j) == 2 )
+        if ( sscanf(cPtr, "%d %d", &i, &j) == 2 )
                 counter++;
-            else
-                fprintf(stderr, "Missing integers on line %d\n", lineNum);
+        else
+            fprintf(stderr, "Missing integers on line %d\n", lineNum);
     }
 
     fclose(filePtr);
