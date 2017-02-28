@@ -1,0 +1,8 @@
+define BUFFER_LEN256
+define DIR_CMD_CHAR'l'
+define READ_CMD_CHAR'r'
+define WRITE_CMD_CHAR'w'
+define DELETE_CMD_CHAR'd'
+define CALC_CMD_CHAR'c'
+define QUIT_CMD_CHAR'q'
+
