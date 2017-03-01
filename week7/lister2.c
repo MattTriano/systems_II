@@ -3,6 +3,10 @@
 #include <string.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <unistd.h>
+#include <sys/stat.h>
+
+#define 	BUFFER_LEN 	1024
 
 int 	main 	(int 	argc,
  		 char* 	argv[]
@@ -27,7 +31,21 @@ int 	main 	(int 	argc,
     struct 	dirent* 	entryPtr;
 
     while ( (entryPtr = readdir(dirPtr)) != NULL )
-        printf("%s\n",entryPtr->d_name);
+    {
+        char 	 	fullPathName[BUFFER_LEN];
+        struct 	stat 	statBuffer;
+
+        snprintf(fullPathName,BUFFER_LEN,"%s/%s",dirName,entryPtr->d_name);
+        stat(fullPathName, &statBuffer);
+
+        if ( S_ISREG(statBuffer.st_mode) )
+            printf("%20s\t(%u)\n", entryPtr->d_name,statBuffer.st_size);
+        else  if ( S_ISDIR(statBuffer.st_mode) ) 
+            printf("%20s\t(dir)\n",entryPtr->d_name);
+        else
+            printf("%20s\t(other)\n", entryPtr->d_name);
+        
+    }
 
     // close
     closedir(dirPtr);
