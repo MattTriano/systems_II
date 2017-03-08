@@ -41,6 +41,8 @@
 
 #define		CALC_PROGNAME		"/usr/bin/bc"
 
+extern 		void*	handleClient(void vPtr);
+
 const int	ERROR_FD= -1;
 
 
@@ -61,7 +63,7 @@ void		doServer(int	listenFd
   int			threadCount= 0;
 
   // YOUR CODE HERE
-  
+    
 }
 
 
