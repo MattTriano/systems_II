@@ -76,15 +76,58 @@ void		doServer(int	listenFd
     }      
 
     iPtr = (int*)calloc(2,sizeof(int));
-    iPtr[1] = connectionDescriptor;
-    iPtr[2] = threadCount;
+    iPtr[0] = connectionDescriptor;
+    iPtr[1] = threadCount;
     threadCount++;
   
     pthread_attr_init(&threadAttr);
     pthread_attr_setdetachedstate(&threadAttr,PTHREAD_CREATE_DETACHED);
     pthread_create(&threadId,&threadAttr,handleClient,iPtr);
+    
 }
 
+void* 	handleClient(void* vPtr) {
+  vPtr 			= (int*)vPtr;
+  int* conDescriptor 	= vPtr[0];
+  int* threadCount	= vPtr[1];
+  free(vPtr);
+
+  //  II.B.  Read command:
+  char		buffer[BUFFER_LEN];
+  char		command;
+  int		fileNum;
+  char		text[BUFFER_LEN];
+  int 		shouldContinue	= 1;
+
+  while  (shouldContinue)
+  {
+    text[0]= '\0';
+
+    read(fd,buffer,BUFFER_LEN);
+    printf("Thread %d received: %s\n",threadNum,buffer);
+    sscanf(buffer,"%c %d \"%[^\"]\"",&command,&fileNum,text);
+
+    // YOUR CODE HERE
+    if (command == "DIR_CMD_CHAR") {
+      dirCommand();
+    }
+  }
+  
+}
+
+void dirCommand() {
+  DIR* 			dirPtr = opendir(".");
+
+  if (!dirPtr) {
+    fprintf(stderr,STD_ERROR_MSG);
+    exit(EXIT_FAILURE);
+  }
+
+  struct  dirent*       entryPtr;
+  
+
+  
+}
 
 //  PURPOSE:  To decide a port number, either from the command line arguments
 //'argc' and 'argv[]', or by asking the user.  Returns port number.
