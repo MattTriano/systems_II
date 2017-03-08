@@ -43,6 +43,8 @@
 
 extern 		void*	handleClient(void* vPtr);
 
+extern 		void* 	dirCommand();
+
 const int	ERROR_FD= -1;
 
 
@@ -81,7 +83,7 @@ void		doServer(int	listenFd
     threadCount++;
   
     pthread_attr_init(&threadAttr);
-    pthread_attr_setdetachedstate(&threadAttr,PTHREAD_CREATE_DETACHED);
+    pthread_attr_setdetachstate(&threadAttr,PTHREAD_CREATE_DETACHED);
     pthread_create(&threadId,&threadAttr,handleClient,(void*)iPtr);
   }    
 }
@@ -119,7 +121,7 @@ void* 	handleClient(void* vPtr) {
   
 }
 
-void dirCommand() {
+void* 		dirCommand() {
   DIR* 			dirPtr = opendir(".");
 
   if (!dirPtr) {
@@ -133,10 +135,10 @@ void dirCommand() {
   while ( (entryPtr = readdir(dirPtr)) != NULL ) {
     cPtr = strchr(entryPtr->d_name,'\0');
     if (cPtr == NULL) {
-      printf("entryPtr doesn't end with \\0\n");
+      printf("entryPtr doesn't end with slash-0\n");
     }
 //    strncat(temp,entryPtr
-  
+  }  
   
 }
 
