@@ -41,7 +41,7 @@
 
 #define		CALC_PROGNAME		"/usr/bin/bc"
 
-extern 		void*	handleClient(void vPtr);
+extern 		void*	handleClient(void* vPtr);
 
 const int	ERROR_FD= -1;
 
@@ -82,14 +82,17 @@ void		doServer(int	listenFd
   
     pthread_attr_init(&threadAttr);
     pthread_attr_setdetachedstate(&threadAttr,PTHREAD_CREATE_DETACHED);
-    pthread_create(&threadId,&threadAttr,handleClient,iPtr);
-    
+    pthread_create(&threadId,&threadAttr,handleClient,(void*)iPtr);
+  }    
 }
 
 void* 	handleClient(void* vPtr) {
-  vPtr 			= (int*)vPtr;
-  int* conDescriptor 	= vPtr[0];
-  int* threadCount	= vPtr[1];
+  int* iPtr 		= (int*)vPtr;
+  int* fd	 	= &iPtr[0];
+  int* threadCount	= &iPtr[1];
+  printf("iPtr[0] (conDescriptor) = %d \n",*fd);
+  printf("iPtr[1] (threadcount)   = %d \n",*threadCount);
+
   free(vPtr);
 
   //  II.B.  Read command:
@@ -103,14 +106,15 @@ void* 	handleClient(void* vPtr) {
   {
     text[0]= '\0';
 
-    read(fd,buffer,BUFFER_LEN);
-    printf("Thread %d received: %s\n",threadNum,buffer);
+    read(*fd,buffer,BUFFER_LEN);
+    printf("Thread %d received: %s\n",*threadCount,buffer);
     sscanf(buffer,"%c %d \"%[^\"]\"",&command,&fileNum,text);
 
     // YOUR CODE HERE
-    if (command == "DIR_CMD_CHAR") {
-      dirCommand();
-    }
+    dirCommand();
+//    if (command == "DIR_CMD_CHAR") {
+//      dirCommand();
+//    }
   }
   
 }
@@ -124,8 +128,15 @@ void dirCommand() {
   }
 
   struct  dirent*       entryPtr;
-  
+  char*			cPtr;
 
+  while ( (entryPtr = readdir(dirPtr)) != NULL ) {
+    cPtr = strchr(entryPtr->d_name,'\0');
+    if (cPtr == NULL) {
+      printf("entryPtr doesn't end with \\0\n");
+    }
+//    strncat(temp,entryPtr
+  
   
 }
 
@@ -144,7 +155,7 @@ int		getPortNum(	int	argc,
     portNum= strtol(argv[1],NULL,0);
   else
   {
-    charbuffer[BUFFER_LEN];
+    char 	buffer[BUFFER_LEN];
 
     printf("Port number to monopolize? ");
     fgets(buffer,BUFFER_LEN,stdin);
@@ -159,9 +170,8 @@ int		getPortNum(	int	argc,
 //  PURPOSE:  To attempt to create and return a file-descriptor for listening
 //to the OS telling this server when a client process has connect()-ed
 //to 'port'.  Returns that file-descriptor, or 'ERROR_FD' on failure.
-int		getServerFileDescriptor
-(intport
-)
+int		getServerFileDescriptor (int	port
+					)
 {
   //  I.  Application validity check:
 
