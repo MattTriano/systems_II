@@ -61,9 +61,28 @@ void		doServer(int	listenFd
   pthread_t		threadId;
   pthread_attr_t	threadAttr;
   int			threadCount= 0;
+  int* 			iPtr;
 
   // YOUR CODE HERE
-    
+
+  listen(listenFd,5);  
+
+  while (1)  {
+    int  connectionDescriptor = accept(listenFd,NULL,NULL);    
+
+    if (connectionDescriptor < 0) {
+      perror("Error on accept attempt\n");
+      exit(EXIT_FAILURE);
+    }      
+
+    iPtr = (int*)calloc(2,sizeof(int));
+    iPtr[1] = connectionDescriptor;
+    iPtr[2] = threadCount;
+    threadCount++;
+  
+    pthread_attr_init(&threadAttr);
+    pthread_attr_setdetachedstate(&threadAttr,PTHREAD_CREATE_DETACHED);
+    pthread_create(&threadId,&threadAttr,handleClient,iPtr);
 }
 
 
