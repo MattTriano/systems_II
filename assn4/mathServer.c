@@ -138,10 +138,14 @@ void* 		dirCommand() {
   }
 
   struct  dirent*       entryPtr;
+  char 			buffer[BUFFER_LEN];
+  char 			temp;
 
-  while ( (entryPtr = readdir(dirPtr)) != NULL ) 
-    printf("%s\n",entryPtr->d_name);
-  
+  while ( (entryPtr = readdir(dirPtr)) != NULL ) {
+    temp = *entryPtr->d_name;
+    strcat(&temp,"\n");
+    printf("%s\n",&temp);
+  }
 }
 
 //  PURPOSE:  To decide a port number, either from the command line arguments
