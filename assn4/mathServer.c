@@ -115,6 +115,7 @@ void* 	handleClient(void* vPtr) {
     read(*fd,buffer,BUFFER_LEN);
     printf("Thread %d received: %s\n",*threadCount,buffer);
     printf("inHandleClient, before sscanf \n");
+    printf("command = %s, fileNum = %d, text = %s \n",&command,fileNum,text);
     sscanf(buffer,"%c %d \"%[^\"]\"",&command,&fileNum,text);
 
     // YOUR CODE HERE
