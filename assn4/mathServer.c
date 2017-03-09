@@ -117,8 +117,9 @@ void* 	handleClient(void* vPtr) {
     sscanf(buffer,"%c %d \"%[^\"]\"",&command,&fileNum,text);
 
     // YOUR CODE HERE
-    dirCommand();
+//    dirCommand();
     printf("Command = %s \n",&command);
+    dirCommand();
     if (&command == "DIR_CMD_CHAR") {
       printf("entered DIR_CMD_CHAR \n");
     }
