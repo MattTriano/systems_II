@@ -69,20 +69,24 @@ void		doServer(int	listenFd
 
   listen(listenFd,5);  
 
+  pthread_create(&threadId,NULL,mathClient,NULL);
+  pthread_attr_init(&threadAttr);
   while (1)  {
+    printf("pre connectDesc \n");
     int  connectionDescriptor = accept(listenFd,NULL,NULL);    
-
+    printf("connectionDescriptor = %d\n",connectionDescriptor);
     if (connectionDescriptor < 0) {
       perror("Error on accept attempt\n");
       exit(EXIT_FAILURE);
     }      
+
+    printf("doing things in doServer");
 
     iPtr = (int*)calloc(2,sizeof(int));
     iPtr[0] = connectionDescriptor;
     iPtr[1] = threadCount;
     threadCount++;
   
-    pthread_attr_init(&threadAttr);
     pthread_attr_setdetachstate(&threadAttr,PTHREAD_CREATE_DETACHED);
     pthread_create(&threadId,&threadAttr,handleClient,(void*)iPtr);
   }    
