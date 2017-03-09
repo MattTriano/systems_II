@@ -69,7 +69,7 @@ void		doServer(int	listenFd
 
   listen(listenFd,5);  
 
-  pthread_create(&threadId,NULL,mathClient,NULL);
+//  pthread_create(&threadId,NULL,mathClient,NULL);
   pthread_attr_init(&threadAttr);
   while (1)  {
     printf("pre connectDesc \n");
@@ -118,7 +118,8 @@ void* 	handleClient(void* vPtr) {
 
     // YOUR CODE HERE
     dirCommand();
-    if (command == "DIR_CMD_CHAR") {
+    printf("Command = %s \n",&command);
+    if (&command == "DIR_CMD_CHAR") {
       printf("entered DIR_CMD_CHAR \n");
     }
   }
@@ -128,21 +129,15 @@ void* 	handleClient(void* vPtr) {
 void* 		dirCommand() {
   DIR* 			dirPtr = opendir(".");
 
-  if (!dirPtr) {
+  if (dirPtr == NULL) {
     fprintf(stderr,STD_ERROR_MSG);
     exit(EXIT_FAILURE);
   }
 
   struct  dirent*       entryPtr;
-  char*			cPtr;
 
-  while ( (entryPtr = readdir(dirPtr)) != NULL ) {
-    cPtr = strchr(entryPtr->d_name,'\0');
-    if (cPtr == NULL) {
-      printf("entryPtr doesn't end with slash-0\n");
-    }
-//    strncat(temp,entryPtr
-  }  
+  while ( (entryPtr = readdir(dirPtr)) != NULL ) 
+    printf("%s\n",entryPtr->d_name);
   
 }
 
