@@ -118,6 +118,7 @@ void* 	handleClient(void* vPtr) {
 
     // YOUR CODE HERE
 //    dirCommand();
+    printf("buffer = %s \n",buffer);
     printf("Command = %s \n",&command);
     dirCommand();
     if (&command == "DIR_CMD_CHAR") {
