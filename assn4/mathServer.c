@@ -118,9 +118,9 @@ void* 	handleClient(void* vPtr) {
 
     // YOUR CODE HERE
     dirCommand();
-//    if (command == "DIR_CMD_CHAR") {
-//      dirCommand();
-//    }
+    if (command == "DIR_CMD_CHAR") {
+      printf("entered DIR_CMD_CHAR \n");
+    }
   }
   
 }
