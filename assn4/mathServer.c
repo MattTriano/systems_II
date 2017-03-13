@@ -85,6 +85,7 @@ void		doServer(int	listenFd
     iPtr = (int*)calloc(2,sizeof(int));
     iPtr[0] = connectionDescriptor;
     iPtr[1] = threadCount;
+    printf("In doServer, iPtr[0] = %d, and iPtr[1] = %d \n",iPtr[0], iPtr[1]);
     threadCount++;
   
     pthread_attr_setdetachstate(&threadAttr,PTHREAD_CREATE_DETACHED);
