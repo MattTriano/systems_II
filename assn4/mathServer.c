@@ -96,8 +96,8 @@ void		doServer(int	listenFd
 
 void* 	handleClient(void* vPtr) {
   int* iPtr 		= (int*)vPtr;
-  int* fd	 	= iPtr[0];
-  int* threadCount	= iPtr[1];
+  int* fd	 	= &iPtr[0];
+  int* threadCount	= &iPtr[1];
   printf("iPtr[0] (conDescriptor) = %d \n",*fd);
   printf("iPtr[1] (threadcount)   = %d \n",*threadCount);
 
