@@ -149,7 +149,8 @@ void* 		dirCommand() {
     temp = *entryPtr->d_name;
     printf("temp = %s \n",&temp);
     strcat(&temp,"\n");
-    printf("%s\n",&temp);
+    strcat(buffer, &temp);
+    printf("%s\n",buffer);
   }
 }
 
