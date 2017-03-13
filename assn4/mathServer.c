@@ -161,6 +161,14 @@ void* 		dirCommand() {
   closedir(dirPtr);
 }
 
+void* 		readCommand(int 	fileNum ) {
+    char 	fileName[BUFFER_LEN];
+    snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
+
+    read(fileNum,
+// make a buffer to store the file, then use strncat to add on a newline char
+}
+
 //  PURPOSE:  To decide a port number, either from the command line arguments
 //'argc' and 'argv[]', or by asking the user.  Returns port number.
 int		getPortNum(	int	argc,
