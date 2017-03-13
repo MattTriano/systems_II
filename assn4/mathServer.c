@@ -82,7 +82,7 @@ void		doServer(int	listenFd
 
     printf("doing things in doServer");
 
-    iPtr = (int*)calloc(2,sizeof(int));
+    iPtr = calloc(2,sizeof(int*));
     iPtr[0] = conDesc;
     iPtr[1] = threadCount;
     printf("In doServer, iPtr[0] = %d, and iPtr[1] = %d \n",iPtr[0], iPtr[1]);
