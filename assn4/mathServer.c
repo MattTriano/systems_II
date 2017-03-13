@@ -126,7 +126,7 @@ void* 	handleClient(void* vPtr) {
 
     // YOUR CODE HERE
 //    dirCommand();
-    printf("buffer = %s \n",&buffer);
+    printf("buffer = %s \n",buffer);
     printf("text = %s \n",text);
     printf("Command = %s \n",&command);
     shouldContinue=0;
