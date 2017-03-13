@@ -129,12 +129,12 @@ void* 	handleClient(void* vPtr) {
     printf("buffer = %s \n",&buffer);
     printf("text = %s \n",text);
     printf("Command = %s \n",&command);
-    dirCommand();
+//    dirCommand();
 //    if (&command == "DIR_CMD_CHAR") {
 //      printf("entered DIR_CMD_CHAR \n");
 //    }
   }
-  
+  dirCommand(); 
 }
 
 void* 		dirCommand() {
