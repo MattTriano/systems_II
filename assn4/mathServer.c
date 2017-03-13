@@ -89,11 +89,11 @@ void		doServer(int	listenFd
     threadCount++;
     printf("threadcount after ++ing it = %d\n", threadCount);
     
-//    if (fork() == 0) { 
-        pthread_attr_setdetachstate(&threadAttr,PTHREAD_CREATE_DETACHED);
-        pthread_create(&threadId,&threadAttr,handleClient,(void*)iPtr);
-//        exit(EXIT_SUCCESS);
-    }
+
+    pthread_attr_setdetachstate(&threadAttr,PTHREAD_CREATE_DETACHED);
+    pthread_create(&threadId,&threadAttr,handleClient,(void*)iPtr);
+
+    
   }    
 }
 
@@ -130,9 +130,9 @@ void* 	handleClient(void* vPtr) {
     printf("text = %s \n",text);
     printf("Command = %s \n",&command);
     dirCommand();
-    if (&command == "DIR_CMD_CHAR") {
-      printf("entered DIR_CMD_CHAR \n");
-    }
+//    if (&command == "DIR_CMD_CHAR") {
+//      printf("entered DIR_CMD_CHAR \n");
+//    }
   }
   
 }
@@ -151,11 +151,14 @@ void* 		dirCommand() {
   printf("in dirCommand, about to enter while \n");
   while ( (entryPtr = readdir(dirPtr)) != NULL ) {
     filename = entryPtr->d_name;
-    printf("filename = %s \n",filename);
-    strcat(*filename,"\n");
-    strcat(buffer, &filename);
+    strncat(buffer,filename,BUFFER_LEN);
+    strncat(buffer,"\n",BUFFER_LEN); 
+//    printf("filename = %s \n",filename);
+//    strcat(*filename,"\n");
+//    strcat(buffer, &filename);
     printf("%s\n",buffer);
   }
+  closedir(dirPtr);
 }
 
 //  PURPOSE:  To decide a port number, either from the command line arguments
