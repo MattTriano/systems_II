@@ -82,13 +82,13 @@ void	describe(const char*	serviceName,
     continue;
     }
     if (*hostname == '\0')
-	printf("%-32s:",run->ai_cannonname);
+	printf("%-32s:",run->ai_canonname);
     else
         printf("%-32s:", hostname);
 
         switch (run->ai_family)
         {
-        case AF_INET      : 	printf("  (Iv4,"): 		break;
+        case AF_INET      : 	printf("  (Iv4,"); 		break;
         case AF_INET6     : 	printf("  (IPv6,"); 		break;
         case AF_UNSPEC    : 	printf("  (IPv4 & IPv6,");	break;
         case AF_UNIX      : 	printf("  (local Unix,"); 	break;
