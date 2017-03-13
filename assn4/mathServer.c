@@ -129,12 +129,12 @@ void* 	handleClient(void* vPtr) {
     printf("buffer = %s \n",&buffer);
     printf("text = %s \n",text);
     printf("Command = %s \n",&command);
-//    dirCommand();
+    shouldContinue=0;
+    dirCommand();
 //    if (&command == "DIR_CMD_CHAR") {
 //      printf("entered DIR_CMD_CHAR \n");
 //    }
-  }
-  dirCommand(); 
+  } 
 }
 
 void* 		dirCommand() {
@@ -165,9 +165,25 @@ void* 		readCommand(int 	fileNum ) {
     char 	fileName[BUFFER_LEN];
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
 
-    read(fileNum,
-// make a buffer to store the file, then use strncat to add on a newline char
+    char 	buffer[BUFFER_LEN];
+    int 	fd = open(fileName,O_RDONLY,0440); //
+
+    if (fd <= -1) {
+        fprintf(stderr,STD_ERROR_MSG);
+    }
+
+    read(fd,buffer,BUFFER_LEN);
+    strcat(buffer,"\0");
+    write(fd,buffer,strlen(buffer));
+    close(fd);
 }
+
+
+//void* 		writeCommand(int 	fileNum
+//			     char	text) 
+//{
+        
+//}
 
 //  PURPOSE:  To decide a port number, either from the command line arguments
 //'argc' and 'argv[]', or by asking the user.  Returns port number.
