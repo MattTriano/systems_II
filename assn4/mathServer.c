@@ -110,7 +110,8 @@ void* 	handleClient(void* vPtr) {
 
   while  (shouldContinue)
   {
-    text[0]= '\0';
+    memset(buffer,'\0',BUFFER_LEN);
+    memset(text  ,'\0',BUFFER_LEN);
     printf("inHandleClient, before the read, fd = %d \n",*fd);
     read(*fd,buffer,BUFFER_LEN);
     printf("Thread %d received: %s\n",*threadCount,buffer);
