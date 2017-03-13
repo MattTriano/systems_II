@@ -96,8 +96,8 @@ void		doServer(int	listenFd
 
 void* 	handleClient(void* vPtr) {
   int* iPtr 		= (int*)vPtr;
-  int* fd	 	= &iPtr[0];
-  int* threadCount	= &iPtr[1];
+  int* fd	 	= iPtr[0];
+  int* threadCount	= iPtr[1];
   printf("iPtr[0] (conDescriptor) = %d \n",*fd);
   printf("iPtr[1] (threadcount)   = %d \n",*threadCount);
 
@@ -115,7 +115,7 @@ void* 	handleClient(void* vPtr) {
     memset(buffer,'\0',BUFFER_LEN);
     memset(text  ,'\0',BUFFER_LEN);
     printf("inHandleClient, before the read, fd = %d \n",*fd);
-    read(*fd,buffer,BUFFER_LEN);
+    read(fd,buffer,BUFFER_LEN);
     printf("Thread %d received: %s\n",*threadCount,buffer);
     printf("inHandleClient, before sscanf \n");
     printf("command = %s, fileNum = %d, text = %s \n",&command,fileNum,text);
