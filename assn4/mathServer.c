@@ -143,13 +143,13 @@ void* 		dirCommand() {
 
   struct  dirent*       entryPtr;
   char 			buffer[BUFFER_LEN];
-  char*			temp;
+  char*			filename;
   printf("in dirCommand, about to enter while \n");
   while ( (entryPtr = readdir(dirPtr)) != NULL ) {
-    temp = *entryPtr->d_name;
-    printf("temp = %s \n",*temp);
-    strcat(&temp,"\n");
-    strcat(buffer, &temp);
+    filename = entryPtr->d_name;
+    printf("filename = %s \n",filename);
+    strcat(*filename,"\n");
+    strcat(buffer, &filename);
     printf("%s\n",buffer);
   }
 }
