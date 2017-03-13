@@ -89,10 +89,10 @@ void		doServer(int	listenFd
     threadCount++;
     printf("threadcount after ++ing it = %d\n", threadCount);
     
-    if (fork() == 0) { 
+//    if (fork() == 0) { 
         pthread_attr_setdetachstate(&threadAttr,PTHREAD_CREATE_DETACHED);
         pthread_create(&threadId,&threadAttr,handleClient,(void*)iPtr);
-        exit(EXIT_SUCCESS);
+//        exit(EXIT_SUCCESS);
     }
   }    
 }
