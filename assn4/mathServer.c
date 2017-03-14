@@ -84,11 +84,11 @@ void		doServer(int	listenFd
 
     iPtr = (int*)calloc(2,sizeof(int*));
     iPtr[0] = fd;
-    iPtr[1] = threadCount;
-    printf("In doServer, fd = %d, and threadCount = %d",fd, threadcount);
+    iPtr[1] = threadId;
+    printf("In doServer, fd = %d, and threadCount = %d",fd, threadId);
     printf("In doServer, iPtr[0] = %d, and iPtr[1] = %d \n",iPtr[0], iPtr[1]);
     threadCount++;
-    printf("threadcount after ++ing it = %d\n", threadCount);
+    printf("threadcount after ++ing it = %d\n", threadId);
     
 
     pthread_attr_setdetachstate(&threadAttr,PTHREAD_CREATE_DETACHED);
@@ -101,12 +101,12 @@ void		doServer(int	listenFd
 void* 	handleClient(void* vPtr) {
   int* iPtr 		= (int*)vPtr;
   int* fd	 	= &iPtr[0];
-  int* threadCount	= &iPtr[1];
+  int* threadId		= &iPtr[1];
   printf("iPtr[0] (conDescriptor) = %d \n",*fd);
   printf("iPtr[0] (conDesc again) = %d \n",*fd);
   printf("actual iPtr[0] = %d \n",iPtr[0]);
   printf("actual iPtr[1] = %d \n",iPtr[1]);
-  printf("iPtr[1] (threadcount)   = %d \n",*threadCount);
+  printf("iPtr[1] (threadId)   = %d \n",*threadId);
 
   free(vPtr);
 
@@ -123,7 +123,7 @@ void* 	handleClient(void* vPtr) {
     memset(text  ,'\0',BUFFER_LEN);
     printf("inHandleClient, before the read, fd = %d \n",*fd);
     read(fd,buffer,BUFFER_LEN);
-    printf("Thread %d received: %s\n",*threadCount,buffer);
+    printf("Thread %d received: %s\n",*threadId,buffer);
     printf("inHandleClient, before sscanf \n");
     printf("command = %s, fileNum = %d, text = %s \n",&command,fileNum,text);
     sscanf(buffer,"%c %d \"%[^\"]\"",&command,&fileNum,text);
