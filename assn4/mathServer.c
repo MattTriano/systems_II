@@ -116,8 +116,8 @@ void* 	handleClient(void* vPtr) {
   char		text[BUFFER_LEN];
   int 		shouldContinue	= 1;
 
-  while  (shouldContinue)
-  {
+//  while  (shouldContinue)
+//  {
     memset(buffer,'\0',BUFFER_LEN);
     memset(text  ,'\0',BUFFER_LEN);
     printf("inHandleClient, before the read, fd = %d \n",*fd);
@@ -138,7 +138,7 @@ void* 	handleClient(void* vPtr) {
         printf("entered DIR_CMD_CHAR \n");
         shouldContinue=0;
     }
-  } 
+//  } 
 }
 
 void* 		dirCommand() {
