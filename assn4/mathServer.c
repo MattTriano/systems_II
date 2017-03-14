@@ -57,7 +57,7 @@ const int	ERROR_FD= -1;
 void		doServer(int	listenFd
 			)
 {
-  //  I.  Application validity check:
+  //  I.  Application validiity check:
 
   //  II.  Server clients:
   pthread_t		threadId;
@@ -73,9 +73,9 @@ void		doServer(int	listenFd
   pthread_attr_init(&threadAttr);
   while (1)  {
     printf("pre connectDesc \n");
-    int  conDesc = accept(listenFd,NULL,NULL);    
-    printf("connectionDescriptor = %d\n",conDesc);
-    if (conDesc < 0) {
+    int  fd = accept(listenFd,NULL,NULL);    
+    printf("connectionDescriptor = %d\n",fd);
+    if (fd < 0) {
       perror("Error on accept attempt\n");
       exit(EXIT_FAILURE);
     }      
@@ -83,8 +83,9 @@ void		doServer(int	listenFd
     printf("doing things in doServer");
 
     iPtr = (int*)calloc(2,sizeof(int*));
-    iPtr[0] = conDesc;
+    iPtr[0] = fd;
     iPtr[1] = threadCount;
+    printf("In doServer, fd = %d, and threadCount = %d",fd, threadcount);
     printf("In doServer, iPtr[0] = %d, and iPtr[1] = %d \n",iPtr[0], iPtr[1]);
     threadCount++;
     printf("threadcount after ++ing it = %d\n", threadCount);
@@ -160,8 +161,9 @@ void* 		dirCommand() {
 //    printf("filename = %s \n",filename);
 //    strcat(*filename,"\n");
 //    strcat(buffer, &filename);
-    printf("%s\n",buffer);
+//    printf("%s\n",buffer);  
   }
+  return(buffer);
   closedir(dirPtr);
 }
 
