@@ -80,12 +80,12 @@ void		doServer(int	listenFd
       exit(EXIT_FAILURE);
     }      
 
-    printf("doing things in doServer");
+    printf("doing things in doServer\n");
 
     iPtr = (int*)calloc(2,sizeof(int*));
     iPtr[0] = fd;
     iPtr[1] = threadId;
-    printf("In doServer, fd = %d, and threadCount = %d",fd, threadId);
+    printf("In doServer, fd = %d, and threadCount = %d \n",fd, &threadId);
     printf("In doServer, iPtr[0] = %d, and iPtr[1] = %d \n",iPtr[0], iPtr[1]);
     threadCount++;
     printf("threadcount after ++ing it = %d\n", threadId);
