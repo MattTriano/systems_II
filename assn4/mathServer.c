@@ -133,10 +133,11 @@ void* 	handleClient(void* vPtr) {
     printf("text = %s \n",text);
     printf("Command = %s \n",&command);
     
-    dirCommand();
-//    if (&command == "DIR_CMD_CHAR") {
-//      printf("entered DIR_CMD_CHAR \n");
-//    }
+//    dirCommand();
+    if (&command == 1) {
+        printf("entered DIR_CMD_CHAR \n");
+        shouldContinue=0;
+    }
   } 
 }
 
