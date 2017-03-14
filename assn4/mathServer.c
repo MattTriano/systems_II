@@ -43,7 +43,7 @@
 
 extern 		void*	handleClient(void* vPtr);
 extern 		void* 	dirCommand(int fd);
-extern 		void* 	readCommand(int fileNum);
+extern 		void* 	readCommand(int fileNum, int clientFd);
 
 const int	ERROR_FD= -1;
 
@@ -141,7 +141,7 @@ void* 	handleClient(void* vPtr) {
         printf("entered DIR_CMD_CHAR \n");
         shouldContinue=0;
     } else if (command == READ_CMD_CHAR) {
-        readCommand(fd);
+        readCommand(fd,fileNum);
     }
     printf("Thread %d quitting. \n",*threadId);
     return(NULL);
@@ -170,21 +170,22 @@ void* 		dirCommand(int fd) {
   closedir(dirPtr);
 }
 
-void* 		readCommand(int 	fileNum ) {
+void* 		readCommand(int 	clientFd, 
+                            int		fileNum) {
     char 	fileName[BUFFER_LEN];
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
 
     char 	buffer[BUFFER_LEN];
-    int 	fd = open(fileName,O_RDONLY,0440); //
+    int 	fileFd = open(fileName,O_RDONLY,0440); //
 
-    if (fd <= -1) {
+    if (fileFd <= -1) {
         fprintf(stderr,STD_ERROR_MSG);
     }
 
-    read(fd,buffer,BUFFER_LEN);
+    read(fileFd,buffer,BUFFER_LEN);
     strcat(buffer,"\0");
-    write(fd,buffer,strlen(buffer));
-    close(fd);
+    write(clientFd,buffer,strlen(buffer));
+    close(fileFd);
 }
 
 
