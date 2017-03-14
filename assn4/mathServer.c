@@ -159,11 +159,7 @@ void* 		dirCommand(int fd) {
   while ( (entryPtr = readdir(dirPtr)) != NULL ) {
     filename = entryPtr->d_name;
     strncat(buffer,filename,BUFFER_LEN);
-    strncat(buffer,"\n",BUFFER_LEN); 
-//    printf("filename = %s \n",filename);
-//    strcat(*filename,"\n");
-//    strcat(buffer, &filename);
-//    printf("%s\n",buffer);  
+    strncat(buffer,"\n",BUFFER_LEN);  
   }
   write(fd,buffer,strlen(buffer));
   closedir(dirPtr);
