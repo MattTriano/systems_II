@@ -174,7 +174,7 @@ void* 		readCommand(int 	clientFd,
                             int		fileNum) {
     char 	fileName[BUFFER_LEN];
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
-
+    printf("in readCommand: clientFd = %d, fileNum = %d \n",clientFd, fileNum);
     char 	buffer[BUFFER_LEN];
     int 	fileFd = open(fileName,O_RDONLY,0440); //
 
