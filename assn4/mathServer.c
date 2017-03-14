@@ -103,6 +103,8 @@ void* 	handleClient(void* vPtr) {
   int* threadCount	= &iPtr[1];
   printf("iPtr[0] (conDescriptor) = %d \n",*fd);
   printf("iPtr[0] (conDesc again) = %d \n",*fd);
+  printf("actual iPtr[0] = %d \n",iPtr[0]);
+  printf("actual iPtr[1] = %d \n",iPtr[1]);
   printf("iPtr[1] (threadcount)   = %d \n",*threadCount);
 
   free(vPtr);
