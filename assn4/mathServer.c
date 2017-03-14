@@ -177,7 +177,7 @@ void* 		readCommand(int 	clientFd,
     printf("in readCommand: clientFd = %d, fileNum = %d \n",clientFd, fileNum);
     char 	buffer[BUFFER_LEN];
     int 	fileFd = open(fileName,O_RDONLY,0440); //
-
+    printf("fileFd = %d \n",fileFd);
     if (fileFd <= -1) {
         fprintf(stderr,STD_ERROR_MSG);
     }
