@@ -42,8 +42,8 @@
 #define		CALC_PROGNAME		"/usr/bin/bc"
 
 extern 		void*	handleClient(void* vPtr);
-
-extern 		void* 	dirCommand();
+extern 		void* 	dirCommand(int fd);
+extern 		void* 	readCommand(int fileNum);
 
 const int	ERROR_FD= -1;
 
@@ -140,7 +140,11 @@ void* 	handleClient(void* vPtr) {
         dirCommand(fd);
         printf("entered DIR_CMD_CHAR \n");
         shouldContinue=0;
+    } else if (command == READ_CMD_CHAR) {
+        readCommand(fd);
     }
+    printf("Thread %d quitting. \n",*threadId);
+    return(NULL);
 //  } 
 }
 
@@ -156,7 +160,8 @@ void* 		dirCommand(int fd) {
   char 			buffer[BUFFER_LEN];
   char*			filename;
   printf("in dirCommand, about to enter while \n");
-  while ( (entryPtr = readdir(dirPtr)) != NULL ) {
+  while ( (entryPtr = readdir(dirPtr)) != NULL ) 
+{
     filename = entryPtr->d_name;
     strncat(buffer,filename,BUFFER_LEN);
     strncat(buffer,"\n",BUFFER_LEN);  
