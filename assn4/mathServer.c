@@ -135,7 +135,7 @@ void* 	handleClient(void* vPtr) {
     printf("Command = %s \n",&command);
     
 //    dirCommand();
-    if (&command == 1) {
+    if (command == 1) {
         printf("entered DIR_CMD_CHAR \n");
         shouldContinue=0;
     }
@@ -163,7 +163,7 @@ void* 		dirCommand() {
 //    strcat(buffer, &filename);
 //    printf("%s\n",buffer);  
   }
-  return(buffer);
+  return(*buffer);
   closedir(dirPtr);
 }
 
