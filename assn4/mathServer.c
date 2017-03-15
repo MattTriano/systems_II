@@ -118,6 +118,7 @@ void* 	handleClient(void* vPtr) {
   int		fileNum;
   char		text[BUFFER_LEN];
   int 		shouldContinue	= 1;
+  int* 		textPtr;
 
   while  (shouldContinue)
   {
@@ -145,6 +146,7 @@ void* 	handleClient(void* vPtr) {
         readCommand(fd,fileNum);
     } else if (command == WRITE_CMD_CHAR) {
         printf("entered WRITE_CMD_CHAR, text = %s \n",text); // need to figure out how to pass full text
+//        textPtr = (int*)malloc(sizeof(char)*
         writeCommand(fd,fileNum,&text);
     }
   }
@@ -200,6 +202,7 @@ void* 		writeCommand(int	clientFd,
                              char 	text	) {
     char 	fileName[BUFFER_LEN];
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
+    printf("writeCmd, before sizing text: text = %s \n",&text);//Experimental
     size_t 	textLen = strlen(text);
     int 	numWritten;
     printf("clientFd = %d, fileNum = %d, text = %s, textLen = %d \n",clientFd,fileNum,&text, textLen);
