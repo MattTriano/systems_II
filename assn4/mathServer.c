@@ -140,7 +140,7 @@ void* 	handleClient(void* vPtr) {
     if (command == DIR_CMD_CHAR) {
         dirCommand(fd);
         printf("entered DIR_CMD_CHAR \n");
-        shouldContinue=0;
+//        shouldContinue=0;
     } else if (command == READ_CMD_CHAR) {
         printf("entered READ_CMD_CHAR \n");
         readCommand(fd,fileNum);
