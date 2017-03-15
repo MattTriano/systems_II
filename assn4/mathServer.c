@@ -142,9 +142,11 @@ void* 	handleClient(void* vPtr) {
         printf("entered DIR_CMD_CHAR \n");
         shouldContinue=0;
     } else if (command == READ_CMD_CHAR) {
+        printf("entered READ_CMD_CHAR \n");
         readCommand(fd,fileNum);
     } else if (command == WRITE_CMD_CHAR) {
-        writeCommand(fd,fileNum,&text);
+        printf("entered WRITE_CMD_CHAR \n");
+        writeCommand(fd,fileNum,*text);
     }
   }
   printf("Thread %d quitting. \n",*threadId);
