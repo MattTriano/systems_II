@@ -43,7 +43,8 @@
 
 extern 		void*	handleClient(void* vPtr);
 extern 		void* 	dirCommand(int fd);
-extern 		void* 	readCommand(int fileNum, int clientFd);
+extern 		void* 	readCommand(int clientFd, int fileNum);
+extern		void*	writeCommand(int clientFd, int fileNum, char text);
 
 const int	ERROR_FD= -1;
 
@@ -142,6 +143,8 @@ void* 	handleClient(void* vPtr) {
         shouldContinue=0;
     } else if (command == READ_CMD_CHAR) {
         readCommand(fd,fileNum);
+    } else if (command == WRITE_CMD_CHAR) {
+        writeCommand(fd,fileNum,&text);
     }
     printf("Thread %d quitting. \n",*threadId);
     return(NULL);
