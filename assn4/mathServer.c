@@ -145,7 +145,7 @@ void* 	handleClient(void* vPtr) {
         printf("entered READ_CMD_CHAR \n");
         readCommand(fd,fileNum);
     } else if (command == WRITE_CMD_CHAR) {
-        printf("entered WRITE_CMD_CHAR \n");
+        printf("entered WRITE_CMD_CHAR, text = %s \n",&text);
         writeCommand(fd,fileNum,*text);
     }
   }
