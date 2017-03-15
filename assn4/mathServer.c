@@ -196,14 +196,15 @@ void* 		writeCommand(int	clientFd,
     char 	fileName[BUFFER_LEN];
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
     size_t 	textLen = strlen(&text);
+    int 	numWritten;
 
     int fileFd = open(fileName,O_WRONLY|O_CREAT, 0660);
     if (textLen <= BUFFER_LEN) {
-        write(clientFd,&text,textLen);
+        numWritten = write(fileFd,&text,textLen);
     } else {
-        write(clientFd,&text,BUFFER_LEN);
+        numWritten = write(fileFd,&text,BUFFER_LEN);
     }
-    if (fileFd != -1) {
+    if (numWritten != -1 && fileFd != -1) {
         fprintf(stdout,STD_OKAY_MSG);
     } else {
         fprintf(stderr,STD_ERROR_MSG);
