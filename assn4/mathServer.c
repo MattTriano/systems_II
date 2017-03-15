@@ -203,6 +203,7 @@ void* 		writeCommand(int	clientFd,
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
     size_t 	textLen = strlen(&text);
     int 	numWritten;
+    printf("clientFd = %d, fileNum = %d, and text = %s \n",clientFd,fileNum,&text);
 
     int fileFd = open(fileName,O_WRONLY|O_CREAT, 0660);
     if (textLen <= BUFFER_LEN) {
