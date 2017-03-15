@@ -19,8 +19,8 @@
 //---Header file inclusion---//
 
 #include "mathClientServer.h"
-#include <errno.h> 		// For perror()
-#include <pthread.h> 		// For pthread_create()
+#include <errno.h> // For perror()
+#include <pthread.h> // For pthread_create()
 
 
 //---Definition of constants:---//
@@ -41,10 +41,10 @@
 
 #define		CALC_PROGNAME		"/usr/bin/bc"
 
-extern 		void*	handleClient(void* vPtr);
-extern 		void* 	dirCommand(int fd);
-extern 		void* 	readCommand(int clientFd, int fileNum);
-extern		void*	writeCommand(int clientFd, int fileNum, char text);
+extern void*	handleClient(void* vPtr);
+extern void*	 dirCommand(int fd);
+extern void*	 readCommand(int clientFd, int fileNum);
+extern void*	writeCommand(int clientFd, int fileNum, char text);
 
 const int	ERROR_FD= -1;
 
@@ -55,8 +55,8 @@ const int	ERROR_FD= -1;
 
 //  PURPOSE:  To run the server by 'accept()'-ing client requests from
 //'listenFd' and doing them.
-void		doServer(int	listenFd
-			)
+void		doServer(int		listenFd
+)
 {
   //  I.  Application validiity check:
 
@@ -87,7 +87,7 @@ void		doServer(int	listenFd
     iPtr[0] = fd;
     threadId = getpid();
     iPtr[1] = threadId;
-//    printf("In doServer, fd = %d, and threadCount = %d \n",fd, &threadId);
+    printf("In doServer, fd = %d, and threadCount = %d \n",fd, &threadId);
     printf("In doServer, iPtr[0] = %d, and iPtr[1] = %d \n",iPtr[0], iPtr[1]);
     threadCount++;
 //    printf("threadcount after ++ing it = %d\n", threadId);
@@ -100,10 +100,10 @@ void		doServer(int	listenFd
   }    
 }
 
-void* 	handleClient(void* vPtr) {
-  int* iPtr 		= (int*)vPtr;
-  int fd	 	= iPtr[0];
-  int* threadId		= &iPtr[1];
+void* handleClient(void* vPtr) {
+  int* iPtr = (int*)vPtr;
+  int fd = iPtr[0];
+  int* threadId= &iPtr[1];
   printf("iPtr[0] (conDescriptor) = %d \n",fd);
   printf("iPtr[0] (conDesc again) = %d \n",fd);
   printf("actual iPtr[0] = %d \n",iPtr[0]);
@@ -113,12 +113,11 @@ void* 	handleClient(void* vPtr) {
   free(vPtr);
 
   //  II.B.  Read command:
-  char		buffer[BUFFER_LEN];
-  char		command;
-  int		fileNum;
+  char  	buffer[BUFFER_LEN];
+  char  	command;
+  int  		fileNum;
   char		text[BUFFER_LEN];
-  int 		shouldContinue	= 1;
-  char*		textPtr;
+  int 		shouldContinue= 1;
 
   while  (shouldContinue)
   {
@@ -127,7 +126,7 @@ void* 	handleClient(void* vPtr) {
     printf("inHandleClient, before the read, fd = %d \n",fd);
     read(fd,buffer,BUFFER_LEN);
     printf("Thread %d received: %s\n",*threadId,buffer);
-    printf("inHandleClient, command = %s, fileNum = %d, text = %s, textLen = %d \n",&command,fileNum,text,strlen(text));
+    printf("inHandleClient, command = %s, fileNum = %d, text = %s \n",&command,fileNum,text);
     sscanf(buffer,"%c %d \"%[^\"]\"",&command,&fileNum,text);
 
     // YOUR CODE HERE
@@ -146,9 +145,7 @@ void* 	handleClient(void* vPtr) {
         readCommand(fd,fileNum);
     } else if (command == WRITE_CMD_CHAR) {
         printf("entered WRITE_CMD_CHAR, text = %s \n",text); // need to figure out how to pass full text
-//        textPtr = (char*)malloc(sizeof(char) * strlen(text));
-//        textPtr = *text;
-        writeCommand(fd,fileNum,text); 
+        writeCommand(fd,fileNum,*text);
     }
   }
   printf("Thread %d quitting. \n",*threadId);
@@ -156,17 +153,17 @@ void* 	handleClient(void* vPtr) {
 //  } 
 }
 
-void* 		dirCommand(int fd) {
-  DIR* 			dirPtr = opendir(".");
+void* 		dirCommand(int 	fd) {
+  DIR* dirPtr = opendir(".");
 
   if (dirPtr == NULL) {
     fprintf(stderr,STD_ERROR_MSG);
     exit(EXIT_FAILURE);
   }
 
-  struct  dirent*       entryPtr;
-  char 			buffer[BUFFER_LEN];
-  char*			filename;
+  struct  	dirent*       entryPtr;
+  char 		buffer[BUFFER_LEN];
+  char*		filename;
   printf("in dirCommand, about to enter while \n");
   while ( (entryPtr = readdir(dirPtr)) != NULL ) 
 {
@@ -179,7 +176,7 @@ void* 		dirCommand(int fd) {
 }
 
 void* 		readCommand(int 	clientFd, 
-                            int		fileNum) {
+                	    int		fileNum) {
     char 	fileName[BUFFER_LEN];
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
     printf("fileName = %s \n",fileName); 
@@ -200,13 +197,12 @@ void* 		readCommand(int 	clientFd,
 
 void* 		writeCommand(int	clientFd,
                              int  	fileNum,
-                             char 	text	) {
-    char 	fileName[BUFFER_LEN];
+                             char 	text) {
+    char fileName[BUFFER_LEN];
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
-    printf("writeCmd, before sizing text: text = %s \n",&text);//Experimental
-    size_t 	textLen = strlen(text);
-    int 	numWritten;
-    printf("clientFd = %d, fileNum = %d, text = %s, textLen = %d \n",clientFd,fileNum,text, textLen);
+    int textLen = strlen(&text);
+    int numWritten;
+    printf("clientFd = %d, fileNum = %d, text = %s, textLen = %d \n",clientFd,fileNum,&text, textLen);
 
     int fileFd = open(fileName,O_WRONLY|O_CREAT, 0660);
     if (textLen <= BUFFER_LEN) {
@@ -226,22 +222,22 @@ void* 		writeCommand(int	clientFd,
     close(fileFd);
 }
 
-//void* 		writeCommand(int 	fileNum
-//			     char	text) 
+//void* writeCommand(int fileNum
+//     chartext) 
 //{
         
 //}
 
 //  PURPOSE:  To decide a port number, either from the command line arguments
 //'argc' and 'argv[]', or by asking the user.  Returns port number.
-int		getPortNum(	int	argc,
- 				char*	argv[]
-			  )
+int		getPortNum(int		argc,
+			   char*	argv[]
+  )
 {
   //  I.  Application validity check:
 
   //  II.  Get listening socket:
-  int	portNum;
+  int		portNum;
 
   if  (argc >= 2)
     portNum= strtol(argv[1],NULL,0);
@@ -262,16 +258,16 @@ int		getPortNum(	int	argc,
 //  PURPOSE:  To attempt to create and return a file-descriptor for listening
 //to the OS telling this server when a client process has connect()-ed
 //to 'port'.  Returns that file-descriptor, or 'ERROR_FD' on failure.
-int		getServerFileDescriptor (int	port
-					)
+int 		getServerFileDescriptor (int	 port
+)
 {
   //  I.  Application validity check:
 
   //  II.  Attempt to get socket file descriptor and bind it to 'port':
   //  II.A.  Create a socket
   int socketDescriptor = socket(AF_INET, // AF_INET domain
-        	SOCK_STREAM, // Reliable TCP
-	        0);
+        SOCK_STREAM, // Reliable TCP
+        0);
 
   if  (socketDescriptor < 0)
   {
@@ -297,9 +293,9 @@ int		getServerFileDescriptor (int	port
 
   //  II.B.6.  Try to bind socket with port and other specifications
   int status = bind(socketDescriptor, // from socket()
-    		   (struct sockaddr*)&socketInfo,
-     		   sizeof(socketInfo)
-    		   );
+       (struct sockaddr*)&socketInfo,
+        sizeof(socketInfo)
+       );
 
   if  (status < 0)
   {
@@ -315,14 +311,14 @@ int		getServerFileDescriptor (int	port
 }
 
 
-int  	main 	(int 	argc,
-  		 char*	argv[]
-	    	)
+int  main (int argc,
+   char*	argv[]
+    )
 {
   //  I.  Application validity check:
 
   //  II.  Do server:
-  int 	   port= getPortNum(argc,argv);
+  int      port= getPortNum(argc,argv);
   int      listenFd= getServerFileDescriptor(port);
   int      status= EXIT_FAILURE;
 
@@ -330,7 +326,7 @@ int  	main 	(int 	argc,
   {
     doServer(listenFd);
     close(listenFd);
-    status= EXIT_SUCCESS;
+    status = EXIT_SUCCESS;
   }
 
   //  III.  Finished:
