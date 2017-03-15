@@ -179,7 +179,7 @@ void* 		readCommand(int 	clientFd,
     char 	buffer[BUFFER_LEN];
     int 	fileFd = open(fileName,O_RDONLY,0440); //
     printf("fileFd = %d \n",fileFd);
-    if (fileFd <= -1) {
+    if (fileFd == -1) {
         fprintf(stderr,STD_ERROR_MSG);
     }
 
@@ -189,6 +189,27 @@ void* 		readCommand(int 	clientFd,
     close(fileFd);
 }
 
+
+void* 		writeCommand(int	clientFd,
+                             int  	fileNum,
+                             char 	text	) {
+    char 	fileName[BUFFER_LEN];
+    snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
+    size_t 	textLen = strlen(&text);
+
+    int fileFd = open(fileName,O_WRONLY|O_CREAT, 0660);
+    if (textLen <= BUFFER_LEN) {
+        write(clientFd,&text,textLen);
+    } else {
+        write(clientFd,&text,BUFFER_LEN);
+    }
+    if (fileFd != -1) {
+        fprintf(stdout,STD_OKAY_MSG);
+    } else {
+        fprintf(stderr,STD_ERROR_MSG);
+    }
+    close(fileFd);
+}
 
 //void* 		writeCommand(int 	fileNum
 //			     char	text) 
