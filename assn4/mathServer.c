@@ -119,8 +119,8 @@ void* 	handleClient(void* vPtr) {
   char		text[BUFFER_LEN];
   int 		shouldContinue	= 1;
 
-//  while  (shouldContinue)
-//  {
+  while  (shouldContinue)
+  {
     memset(buffer,'\0',BUFFER_LEN);
     memset(text  ,'\0',BUFFER_LEN);
     printf("inHandleClient, before the read, fd = %d \n",fd);
@@ -146,8 +146,9 @@ void* 	handleClient(void* vPtr) {
     } else if (command == WRITE_CMD_CHAR) {
         writeCommand(fd,fileNum,&text);
     }
-    printf("Thread %d quitting. \n",*threadId);
-    return(NULL);
+  }
+  printf("Thread %d quitting. \n",*threadId);
+  return(NULL);
 //  } 
 }
 
