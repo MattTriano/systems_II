@@ -145,7 +145,7 @@ void* 	handleClient(void* vPtr) {
         readCommand(fd,fileNum);
     } else if (command == WRITE_CMD_CHAR) {
         printf("entered WRITE_CMD_CHAR, text = %s \n",text); // need to figure out how to pass full text
-        writeCommand(fd,fileNum,&text);
+        writeCommand(fd,fileNum,*text);
     }
   }
   printf("Thread %d quitting. \n",*threadId);
@@ -200,19 +200,23 @@ void* 		writeCommand(int	clientFd,
                              char 	text	) {
     char 	fileName[BUFFER_LEN];
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
-    size_t 	textLen = strlen(text);
+    int 	textLen = strlen(&text);
     int 	numWritten;
-    printf("clientFd = %d, fileNum = %d, and text = %s \n",clientFd,fileNum,&text);
+    printf("clientFd = %d, fileNum = %d, text = %s, textLen = %d \n",clientFd,fileNum,&text, textLen);
 
     int fileFd = open(fileName,O_WRONLY|O_CREAT, 0660);
     if (textLen <= BUFFER_LEN) {
+        printf("writeCmd: entered textLen <= buffLen cond, textLen = %d \n", textLen);
         numWritten = write(fileFd,&text,textLen);
     } else {
+        printf("writeCmd: entered textLen > buffLen cond, textLen = %d \n", textLen);
         numWritten = write(fileFd,&text,BUFFER_LEN);
     }
     if (numWritten != -1 && fileFd != -1) {
+        printf("writeCmd: no errors \n");
         fprintf(stdout,STD_OKAY_MSG);
     } else {
+        printf("writeCmd: there was an error");
         fprintf(stderr,STD_ERROR_MSG);
     }
     close(fileFd);
