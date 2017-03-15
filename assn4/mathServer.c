@@ -118,7 +118,7 @@ void* 	handleClient(void* vPtr) {
   int		fileNum;
   char		text[BUFFER_LEN];
   int 		shouldContinue	= 1;
-  int* 		textPtr;
+  char*		textPtr;
 
   while  (shouldContinue)
   {
@@ -127,7 +127,7 @@ void* 	handleClient(void* vPtr) {
     printf("inHandleClient, before the read, fd = %d \n",fd);
     read(fd,buffer,BUFFER_LEN);
     printf("Thread %d received: %s\n",*threadId,buffer);
-    printf("inHandleClient, command = %s, fileNum = %d, text = %s \n",&command,fileNum,text);
+    printf("inHandleClient, command = %s, fileNum = %d, text = %s, textLen = %d \n",&command,fileNum,text,strlen(text));
     sscanf(buffer,"%c %d \"%[^\"]\"",&command,&fileNum,text);
 
     // YOUR CODE HERE
@@ -146,8 +146,9 @@ void* 	handleClient(void* vPtr) {
         readCommand(fd,fileNum);
     } else if (command == WRITE_CMD_CHAR) {
         printf("entered WRITE_CMD_CHAR, text = %s \n",text); // need to figure out how to pass full text
-//        textPtr = (int*)malloc(sizeof(char)*
-        writeCommand(fd,fileNum,&text);
+//        textPtr = (char*)malloc(sizeof(char));
+//        textPtr = &text;
+        writeCommand(fd,fileNum,text); 
     }
   }
   printf("Thread %d quitting. \n",*threadId);
@@ -202,10 +203,10 @@ void* 		writeCommand(int	clientFd,
                              char 	text	) {
     char 	fileName[BUFFER_LEN];
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
-    printf("writeCmd, before sizing text: text = %s \n",&text);//Experimental
+    printf("writeCmd, before sizing text: text = %s \n",text);//Experimental
     size_t 	textLen = strlen(text);
     int 	numWritten;
-    printf("clientFd = %d, fileNum = %d, text = %s, textLen = %d \n",clientFd,fileNum,&text, textLen);
+    printf("clientFd = %d, fileNum = %d, text = %s, textLen = %d \n",clientFd,fileNum,text, textLen);
 
     int fileFd = open(fileName,O_WRONLY|O_CREAT, 0660);
     if (textLen <= BUFFER_LEN) {
