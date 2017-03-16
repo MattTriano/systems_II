@@ -146,6 +146,7 @@ void* handleClient(void* vPtr) {
     } else if (command == WRITE_CMD_CHAR) {
         printf("entered WRITE_CMD_CHAR, text = %s \n",text); // need to figure out how to pass full text
         printf("fileNum = %d \n", fileNum);
+        printf("length of text = %d \n",strlen(text));
         writeCommand(fd,fileNum,*text);
     }
   }
