@@ -296,15 +296,23 @@ void* 		calcCommand(int 	clientFd,
 
     childId = wait(&status);
     int	        fileFd = open(OUTPUT_FILENAME,O_RDONLY,0440);
+    int         errFd= open(ERROR_FILENAME, O_WRONLY|O_CREAT|O_TRUNC,0660);
+    char 	errBuffer[BUFFER_LEN];
 
     if (WIFEXITED(status)) {
         if (WEXITSTATUS(status) != EXIT_SUCCESS) {
             write(clientFd, STD_ERROR_MSG,strlen(STD_ERROR_MSG));
         } else {
             read(fileFd,buffer,BUFFER_LEN);
+            if (strlen(buffer) <BUFFER_LEN) {
+                read(errFd,errBuffer,BUFFER_LEN);
+                strncat(buffer,errBuffer,BUFFER_LEN);           
         }
+        write(clientFd,buffer,BUFFER_LEN);
     }
-    
+    close(fileFd);
+    close(errFd); 
+    return(EXIT_SUCCESS);
 }
 
 
