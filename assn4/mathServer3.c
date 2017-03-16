@@ -46,6 +46,7 @@ extern void*	 dirCommand(int fd);
 extern void*	 readCommand(int clientFd, int fileNum);
 extern void*	writeCommand(int clientFd, int fileNum, void* text);
 extern void*   deleteCommand(int clientFd, int fileNum);
+extern void* 	 calcCommand(int clientFd, int fileNum);
 
 const int	ERROR_FD= -1;
 
@@ -289,7 +290,7 @@ void* 		calcCommand(int 	clientFd,
         dup(outFd);
         close(2);
         dup(errFd);
-	excel(CALC_PROGNAME,CALC_PROGNAME,NULL);
+	execl(CALC_PROGNAME,CALC_PROGNAME,NULL);
 	fprintf(stderr,"CALC_PROGNAME failed to run \n");
 	exit(EXIT_FAILURE);
     }
@@ -307,6 +308,7 @@ void* 		calcCommand(int 	clientFd,
             if (strlen(buffer) <BUFFER_LEN) {
                 read(errFd,errBuffer,BUFFER_LEN);
                 strncat(buffer,errBuffer,BUFFER_LEN);           
+            }
         }
         write(clientFd,buffer,BUFFER_LEN);
     }
