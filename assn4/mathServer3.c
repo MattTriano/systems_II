@@ -92,10 +92,9 @@ void		doServer(int		listenFd
     printf("In doServer, iPtr[0] = %d, and iPtr[1] = %d \n",iPtr[0], iPtr[1]);
     threadCount++;
 
-    close(fd);
     pthread_attr_setdetachstate(&threadAttr,PTHREAD_CREATE_DETACHED);
     pthread_create(&threadId,&threadAttr,handleClient,(void*)iPtr);
-
+    close(fd);
     
   }    
 }
