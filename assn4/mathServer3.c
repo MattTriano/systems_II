@@ -89,11 +89,8 @@ void		doServer(int		listenFd
     iPtr[0] = fd;
     threadId = getpid();
     iPtr[1] = threadId;
-    printf("In doServer, fd = %d, and threadCount = %d \n",fd, &threadId);
     printf("In doServer, iPtr[0] = %d, and iPtr[1] = %d \n",iPtr[0], iPtr[1]);
     threadCount++;
-//    printf("threadcount after ++ing it = %d\n", threadId);
-    
 
     pthread_attr_setdetachstate(&threadAttr,PTHREAD_CREATE_DETACHED);
     pthread_create(&threadId,&threadAttr,handleClient,(void*)iPtr);
@@ -138,18 +135,11 @@ void* handleClient(void* vPtr) {
     printf("text = %s \n",text);
     printf("Command = %s \n",&command);
     
-//    dirCommand();
     if (command == DIR_CMD_CHAR) {
         dirCommand(fd);
-        printf("entered DIR_CMD_CHAR \n");
-//        shouldContinue=0;
     } else if (command == READ_CMD_CHAR) {
-        printf("entered READ_CMD_CHAR \n");
         readCommand(fd,fileNum);
     } else if (command == WRITE_CMD_CHAR) {
-        printf("entered WRITE_CMD_CHAR, text = %s \n",text); // need to figure out how to pass full text
-        printf("fileNum = %d \n", fileNum);
-        printf("length of text = %d \n",strlen(text));
         textPtr = (char*)malloc(sizeof(char)*strlen(text));
         strncpy(textPtr,text,strlen(text));
         writeCommand(fd,fileNum,(void*)textPtr);
@@ -170,38 +160,36 @@ void* handleClient(void* vPtr) {
 }
 
 void* 		dirCommand(int 	fd) {
-  DIR* dirPtr = opendir(".");
+    DIR* dirPtr = opendir(".");
 
-  if (dirPtr == NULL) {
-    fprintf(stderr,STD_ERROR_MSG);
-    exit(EXIT_FAILURE);
-  }
+    if (dirPtr == NULL) {
+        write(fd,STD_ERROR_MSG,strlen(STD_ERROR_MSG));
+//        exit(EXIT_FAILURE);
+    }
 
-  struct  	dirent*       entryPtr;
-  char 		buffer[BUFFER_LEN];
-  char*		filename;
-  printf("in dirCommand, about to enter while \n");
-  while ( (entryPtr = readdir(dirPtr)) != NULL ) 
-{
-    filename = entryPtr->d_name;
-    strncat(buffer,filename,BUFFER_LEN);
-    strncat(buffer,"\n",BUFFER_LEN);  
-  }
-  write(fd,buffer,strlen(buffer));
-  closedir(dirPtr);
+    struct    dirent*   entryPtr;
+    char 		buffer[BUFFER_LEN];
+    char*		filename;
+    while ( (entryPtr = readdir(dirPtr)) != NULL ) 
+    {
+        filename = entryPtr->d_name;
+        strncat(buffer,filename,BUFFER_LEN);
+        strncat(buffer,"\n",BUFFER_LEN);  
+    }
+    write(fd,buffer,strlen(buffer));
+    closedir(dirPtr);
 }
 
 void* 		readCommand(int 	clientFd, 
                 	    int		fileNum) {
     char 	fileName[BUFFER_LEN];
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
-    printf("fileName = %s \n",fileName); 
-    printf("in readCommand: clientFd = %d, fileNum = %d \n",clientFd, fileNum);
+
     char 	buffer[BUFFER_LEN];
     int 	fileFd = open(fileName,O_RDONLY,0440); //
-    printf("fileFd = %d \n",fileFd);
+
     if (fileFd == -1) {
-        fprintf(stderr,STD_ERROR_MSG);
+        write(clientFd,STD_ERROR_MSG,strlen(STD_ERROR_MSG));
     }
 
     read(fileFd,buffer,BUFFER_LEN);
@@ -215,17 +203,10 @@ void* 		writeCommand(int	clientFd,
                              int  	fileNum,
                              void* 	textPtr) {
     char* tPtr = (char*)textPtr;
-//    char  text[BUFFER_LEN]; 
-    printf("Entered writeCmd: \n");
-    printf("writeCmd: clientFd = %d \n",clientFd);
-    printf("writeCmd: fileNum  = %d \n",fileNum);
-    printf("writeCmd: text     = %s \n",tPtr);
-    printf("writeCmd: textLen  = %d \n",strlen(tPtr));
     char fileName[BUFFER_LEN];
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
     int textLen = strlen(tPtr);
     int numWritten;
-//    printf("clientFd = %d, fileNum = %d, text = %s, textLen = %d \n",clientFd,fileNum,&text,textLen);
 
     int fileFd = open(fileName,O_WRONLY|O_CREAT, 0660);
     if (textLen <= BUFFER_LEN) {
