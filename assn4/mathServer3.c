@@ -204,6 +204,7 @@ void* 		writeCommand(int	clientFd,
                              int  	fileNum,
                              void* 	textPtr) {
     char* tPtr = (char*)textPtr;
+    free(textPtr);
 //    char  text[BUFFER_LEN]; 
     printf("Entered writeCmd: \n");
     printf("writeCmd: clientFd = %d \n",clientFd);
@@ -227,9 +228,11 @@ void* 		writeCommand(int	clientFd,
     if (numWritten != -1 && fileFd != -1) {
         printf("writeCmd: no errors \n");
         fprintf(stdout,STD_OKAY_MSG);
+        write(clientFd,STD_OKAY_MSG,strlen(STD_OKAY_MSG));
     } else {
         printf("writeCmd: there was an error");
         fprintf(stderr,STD_ERROR_MSG);
+        write(clientFd,STD_ERROR_MSG,strlen(STD_ERROR_MSG));
     }
     close(fileFd);
 }
