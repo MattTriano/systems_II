@@ -146,7 +146,7 @@ void* handleClient(void* vPtr) {
     } else if (command == WRITE_CMD_CHAR) {
         printf("entered WRITE_CMD_CHAR, text = %s \n",text); // need to figure out how to pass full text
         printf("fileNum = %d \n", fileNum);
-        writeCommand(fd,fileNum,&text);
+        writeCommand(fd,fileNum,*text);
     }
   }
   printf("Thread %d quitting. \n",*threadId);
