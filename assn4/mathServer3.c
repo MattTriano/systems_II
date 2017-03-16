@@ -263,12 +263,14 @@ void* 		deleteCommand(int 	clientFd,
 
 void* 		calcCommand(int 	clientFd,
                             int 	fileNum  ) {
-    pid_t 	calcPid = fork();
+    pid_t 	childId = fork();
+    int 	status;
+    char 	buffer[BUFFER_LEN];
 
-    if (calcPid < 0) {
+    if (childId < 0) {
         write(clientFd,STD_ERROR_MSG,strlen(STD_ERROR_MSG));
-    } else if (calcPid == 0) {
-        charfileName[BUFFER_LEN];
+    } else if (childId == 0) {
+        char	fileName[BUFFER_LEN];
         snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
 
         int	inFd= open(fileName,O_RDONLY,0);
@@ -287,8 +289,22 @@ void* 		calcCommand(int 	clientFd,
         dup(outFd);
         close(2);
         dup(errFd);
-        // stopping point 
+	excel(CALC_PROGNAME,CALC_PROGNAME,NULL);
+	fprintf(stderr,"CALC_PROGNAME failed to run \n");
+	exit(EXIT_FAILURE);
     }
+
+    childId = wait(&status);
+    int	        fileFd = open(OUTPUT_FILENAME,O_RDONLY,0440);
+
+    if (WIFEXITED(status)) {
+        if (WEXITSTATUS(status) != EXIT_SUCCESS) {
+            write(clientFd, STD_ERROR_MSG,strlen(STD_ERROR_MSG));
+        } else {
+            read(fileFd,buffer,BUFFER_LEN);
+        }
+    }
+    
 }
 
 
