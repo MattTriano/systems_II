@@ -161,6 +161,7 @@ void* handleClient(void* vPtr) {
         write(fd,STD_BYE_MSG,strlen(STD_BYE_MSG));
         shouldContinue = 0;
         close(fd);
+        return(EXIT_SUCCESS);
     }
   }
   printf("Thread %d quitting. \n",*threadId);
