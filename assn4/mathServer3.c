@@ -156,7 +156,6 @@ void* 		dirCommand(int 	fd) {
 
     if (dirPtr == NULL) {
         write(fd,STD_ERROR_MSG,strlen(STD_ERROR_MSG));
-//        exit(EXIT_FAILURE);
     }
 
     struct    dirent*   entryPtr;
@@ -168,8 +167,8 @@ void* 		dirCommand(int 	fd) {
         strncat(buffer,filename,BUFFER_LEN);
         strncat(buffer,"\n",BUFFER_LEN);  
     }
-    write(fd,buffer,BUFFER_LEN);
     closedir(dirPtr);
+    write(fd,buffer,BUFFER_LEN);
 }
 
 void* 		readCommand(int 	clientFd, 
