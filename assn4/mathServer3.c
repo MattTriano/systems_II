@@ -154,6 +154,11 @@ void* handleClient(void* vPtr) {
         writeCommand(fd,fileNum,(void*)textPtr);
     } else if (command == DELETE_CMD_CHAR) {
         deleteCommand(fd,fileNum);
+    } else if (command == CALC_CMD_CHAR) {
+        calcCommand(fd,fileNum);
+    } else if (command == QUIT_CMD_CHAR) {
+        write(fd,STD_BYE_MSG,strlen(STD_BYE_MSG));
+        shouldContinue = 0;
     }
   }
   printf("Thread %d quitting. \n",*threadId);
@@ -241,7 +246,7 @@ void* 		writeCommand(int	clientFd,
 }
 
 void* 		deleteCommand(int 	clientFd,
-			      int 	fileNum) {
+			      int 	fileNum  ) {
     char	fileName[BUFFER_LEN];
     int 	status;
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
@@ -254,6 +259,38 @@ void* 		deleteCommand(int 	clientFd,
         write(clientFd,STD_ERROR_MSG,strlen(STD_ERROR_MSG));
     }
 }
+
+
+void* 		calcCommand(int 	clientFd,
+                            int 	fileNum  ) {
+    pid_t 	calcPid = fork();
+
+    if (calcPid < 0) {
+        write(clientFd,STD_ERROR_MSG,strlen(STD_ERROR_MSG));
+    } else if (calcPid == 0) {
+        charfileName[BUFFER_LEN];
+        snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
+
+        int	inFd= open(fileName,O_RDONLY,0);
+        int	outFd= open(OUTPUT_FILENAME,O_WRONLY|O_CREAT|O_TRUNC,0660);
+        int	errFd= open(ERROR_FILENAME, O_WRONLY|O_CREAT|O_TRUNC,0660);
+
+        if  ( (inFd < 0) || (outFd < 0) || (errFd < 0) )
+        {
+            fprintf(stderr,"Could not open one or more files\n");
+            exit(EXIT_FAILURE);
+        }
+ 
+        close(0);
+        dup(inFd);
+        close(1);
+        dup(outFd);
+        close(2);
+        dup(errFd);
+        // stopping point 
+    }
+}
+
 
 //  PURPOSE:  To decide a port number, either from the command line arguments
 //'argc' and 'argv[]', or by asking the user.  Returns port number.
