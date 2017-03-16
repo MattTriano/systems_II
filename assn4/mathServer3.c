@@ -160,6 +160,7 @@ void* handleClient(void* vPtr) {
     } else if (command == QUIT_CMD_CHAR) {
         write(fd,STD_BYE_MSG,strlen(STD_BYE_MSG));
         shouldContinue = 0;
+        close(fd);
     }
   }
   printf("Thread %d quitting. \n",*threadId);
