@@ -200,11 +200,15 @@ void* 		writeCommand(int	clientFd,
                              int  	fileNum,
                              char 	text) {
     printf("Entered writeCmd: \n");
+    printf("writeCmd: clientFd = %d \n",clientFd);
+    printf("writeCmd: fileNum  = %d \n",fileNum);
+    printf("writeCmd: text     = %s \n",&text);
+    printf("writeCmd: textLen  = %d \n",strlen(&text));
     char fileName[BUFFER_LEN];
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
     int textLen = strlen(&text);
     int numWritten;
-    printf("clientFd = %d, fileNum = %d, text = %s, textLen = %d \n",clientFd,fileNum,&text,textLen);
+//    printf("clientFd = %d, fileNum = %d, text = %s, textLen = %d \n",clientFd,fileNum,&text,textLen);
 
     int fileFd = open(fileName,O_WRONLY|O_CREAT, 0660);
     if (textLen <= BUFFER_LEN) {
