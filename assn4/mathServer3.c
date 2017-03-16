@@ -119,20 +119,13 @@ void* handleClient(void* vPtr) {
   
   while  (shouldContinue)
   {
-    memset(buffer,'\0',BUFFER_LEN);
-    memset(text  ,'\0',BUFFER_LEN);
-    printf("inHandleClient, before the read, fd = %d \n",fd);
-    read(fd,buffer,BUFFER_LEN);
-    printf("Thread %d received: %s\n",*threadId,buffer);
-    printf("inHandleClient, command = %s, fileNum = %d, text = %s \n",&command,fileNum,text);
-    sscanf(buffer,"%c %d \"%[^\"]\"",&command,&fileNum,text);
+      memset(buffer,'\0',BUFFER_LEN);
+      memset(text  ,'\0',BUFFER_LEN);
+      read(fd,buffer,BUFFER_LEN);
+      printf("Thread %d received: %s\n",*threadId,buffer);
+      sscanf(buffer,"%c %d \"%[^\"]\"",&command,&fileNum,text);
 
-    // YOUR CODE HERE
-//    dirCommand();
-    printf("buffer = %s \n",buffer);
-    printf("text = %s \n",text);
-    printf("Command = %s \n",&command);
-    
+    // YOUR CODE HERE    
     if (command == DIR_CMD_CHAR) {
         dirCommand(fd);
     } else if (command == READ_CMD_CHAR) {
@@ -149,6 +142,7 @@ void* handleClient(void* vPtr) {
         write(fd,STD_BYE_MSG,strlen(STD_BYE_MSG));
         shouldContinue = 0;
         close(fd);
+        fflush(stdout);
         return(EXIT_SUCCESS);
     }
   }
