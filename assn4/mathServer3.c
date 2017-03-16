@@ -44,7 +44,7 @@
 extern void*	handleClient(void* vPtr);
 extern void*	 dirCommand(int fd);
 extern void*	 readCommand(int clientFd, int fileNum);
-extern void*	writeCommand(int clientFd, int fileNum, char text);
+extern void*	writeCommand(int clientFd, int fileNum, void* text);
 
 const int	ERROR_FD= -1;
 
@@ -101,9 +101,9 @@ void		doServer(int		listenFd
 }
 
 void* handleClient(void* vPtr) {
-  int* iPtr = (int*)vPtr;
-  int fd = iPtr[0];
-  int* threadId= &iPtr[1];
+  int* 	iPtr 	 = (int*)vPtr;
+  int 	fd 	 = iPtr[0];
+  int* 	threadId = &iPtr[1];
   printf("iPtr[0] (conDescriptor) = %d \n",fd);
   printf("iPtr[0] (conDesc again) = %d \n",fd);
   printf("actual iPtr[0] = %d \n",iPtr[0]);
@@ -118,7 +118,7 @@ void* handleClient(void* vPtr) {
   int  		fileNum;
   char		text[BUFFER_LEN];
   int 		shouldContinue= 1;
-  
+  char*		textPtr;
   
   while  (shouldContinue)
   {
@@ -148,8 +148,9 @@ void* handleClient(void* vPtr) {
         printf("entered WRITE_CMD_CHAR, text = %s \n",text); // need to figure out how to pass full text
         printf("fileNum = %d \n", fileNum);
         printf("length of text = %d \n",strlen(text));
-        
-        writeCommand(fd,fileNum,*text);
+        textPtr = (char*)malloc(sizeof(char)*strlen(text));
+        strncpy(textPtr,text,strlen(text));
+        writeCommand(fd,fileNum,(void*)textPtr);
     }
   }
   printf("Thread %d quitting. \n",*threadId);
@@ -201,25 +202,27 @@ void* 		readCommand(int 	clientFd,
 
 void* 		writeCommand(int	clientFd,
                              int  	fileNum,
-                             char 	text) {
+                             void* 	textPtr) {
+    char* tPtr = (char*)textPtr;
+//    char  text[BUFFER_LEN]; 
     printf("Entered writeCmd: \n");
     printf("writeCmd: clientFd = %d \n",clientFd);
     printf("writeCmd: fileNum  = %d \n",fileNum);
-    printf("writeCmd: text     = %s \n",&text);
-    printf("writeCmd: textLen  = %d \n",strlen(&text));
+    printf("writeCmd: text     = %s \n",tPtr);
+    printf("writeCmd: textLen  = %d \n",strlen(tPtr));
     char fileName[BUFFER_LEN];
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
-    int textLen = strlen(&text);
+    int textLen = strlen(tPtr);
     int numWritten;
 //    printf("clientFd = %d, fileNum = %d, text = %s, textLen = %d \n",clientFd,fileNum,&text,textLen);
 
     int fileFd = open(fileName,O_WRONLY|O_CREAT, 0660);
     if (textLen <= BUFFER_LEN) {
         printf("writeCmd: entered textLen <= buffLen cond, textLen = %d \n", textLen);
-        numWritten = write(fileFd,&text,textLen);
+        numWritten = write(fileFd,tPtr,textLen);
     } else {
         printf("writeCmd: entered textLen > buffLen cond, textLen = %d \n", textLen);
-        numWritten = write(fileFd,&text,BUFFER_LEN);
+        numWritten = write(fileFd,tPtr,BUFFER_LEN);
     }
     if (numWritten != -1 && fileFd != -1) {
         printf("writeCmd: no errors \n");
