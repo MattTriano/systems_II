@@ -45,6 +45,7 @@ extern void*	handleClient(void* vPtr);
 extern void*	 dirCommand(int fd);
 extern void*	 readCommand(int clientFd, int fileNum);
 extern void*	writeCommand(int clientFd, int fileNum, void* text);
+extern void*   deleteCommand(int clientFd, int fileNum);
 
 const int	ERROR_FD= -1;
 
@@ -151,6 +152,8 @@ void* handleClient(void* vPtr) {
         textPtr = (char*)malloc(sizeof(char)*strlen(text));
         strncpy(textPtr,text,strlen(text));
         writeCommand(fd,fileNum,(void*)textPtr);
+    } else if (command == DELETE_CMD_CHAR) {
+        deleteCommand(fd,fileNum);
     }
   }
   printf("Thread %d quitting. \n",*threadId);
@@ -237,12 +240,20 @@ void* 		writeCommand(int	clientFd,
     close(fileFd);
 }
 
-
-//void* writeCommand(int fileNum
-//     chartext) 
-//{
-        
-//}
+void* 		deleteCommand(int 	clientFd,
+			      int 	fileNum) {
+    char	fileName[BUFFER_LEN];
+    int 	status;
+    snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
+    status = unlink(fileName);
+    if (status != -1) {
+        printf("deleteCmd: unlink executed properly\n");
+        write(clientFd,STD_OKAY_MSG,strlen(STD_OKAY_MSG));
+    } else {
+        printf("deleteCmd: unlink ended abnormally \n");
+        write(clientFd,STD_ERROR_MSG,strlen(STD_ERROR_MSG));
+    }
+}
 
 //  PURPOSE:  To decide a port number, either from the command line arguments
 //'argc' and 'argv[]', or by asking the user.  Returns port number.
