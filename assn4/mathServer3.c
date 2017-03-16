@@ -174,7 +174,7 @@ void* 		dirCommand(int 	fd) {
         strncat(buffer,filename,BUFFER_LEN);
         strncat(buffer,"\n",BUFFER_LEN);  
     }
-    write(fd,buffer,strlen(buffer));
+//    write(fd,buffer,strlen(buffer));
     closedir(dirPtr);
 }
 
