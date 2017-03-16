@@ -145,6 +145,7 @@ void* handleClient(void* vPtr) {
         readCommand(fd,fileNum);
     } else if (command == WRITE_CMD_CHAR) {
         printf("entered WRITE_CMD_CHAR, text = %s \n",text); // need to figure out how to pass full text
+        printf("fileNum = %d \n", fileNum);
         writeCommand(fd,fileNum,&text);
     }
   }
@@ -198,11 +199,12 @@ void* 		readCommand(int 	clientFd,
 void* 		writeCommand(int	clientFd,
                              int  	fileNum,
                              char 	text) {
+    printf("Entered writeCmd: \n");
     char fileName[BUFFER_LEN];
     snprintf(fileName,BUFFER_LEN,"%d%s",fileNum,FILENAME_EXTENSION);
-    int textLen = strlen(text);
+    int textLen = strlen(&text);
     int numWritten;
-    printf("clientFd = %d, fileNum = %d, text = %s, textLen = %d \n",clientFd,fileNum,&text, textLen);
+    printf("clientFd = %d, fileNum = %d, text = %s, textLen = %d \n",clientFd,fileNum,&text,textLen);
 
     int fileFd = open(fileName,O_WRONLY|O_CREAT, 0660);
     if (textLen <= BUFFER_LEN) {
