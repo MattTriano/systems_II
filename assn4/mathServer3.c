@@ -53,8 +53,6 @@ const int	ERROR_FD= -1;
 
 //---Definition of functions:---//
 
-
-
 //  PURPOSE:  To run the server by 'accept()'-ing client requests from
 //'listenFd' and doing them.
 void		doServer(int		listenFd) {
@@ -70,24 +68,18 @@ void		doServer(int		listenFd) {
 
     listen(listenFd,5);  
 
-    //  pthread_create(&threadId,NULL,mathClient,NULL);
     pthread_attr_init(&threadAttr);
     while (1)  {
         printf("pre connectDesc \n");
         int  fd = accept(listenFd,NULL,NULL);    
-        printf("connectionDescriptor = %d\n",fd);
         if (fd < 0) {
             perror("Error on accept attempt\n");
             exit(EXIT_FAILURE);
         }      
 
-        printf("doing things in doServer\n");
-
         iPtr = (int*)calloc(2,sizeof(int*));
         iPtr[0] = fd;
-//    threadId = getpid();
         iPtr[1] = getpid();
-        printf("In doServer, iPtr[0] = %d, and iPtr[1] = %d \n",iPtr[0], iPtr[1]);
         threadCount++;
 
         pthread_attr_setdetachstate(&threadAttr,PTHREAD_CREATE_DETACHED);
@@ -101,12 +93,6 @@ void* handleClient(void* vPtr) {
   int* 	iPtr 	 = (int*)vPtr;
   int 	fd 	 = iPtr[0];
   int* 	threadId = &iPtr[1];
-  printf("iPtr[0] (conDescriptor) = %d \n",fd);
-  printf("iPtr[0] (conDesc again) = %d \n",fd);
-  printf("actual iPtr[0] = %d \n",iPtr[0]);
-  printf("actual iPtr[1] = %d \n",iPtr[1]);
-  printf("iPtr[1] (threadId)   = %d \n",*threadId);
-
   free(vPtr);
 
   //  II.B.  Read command:
@@ -168,7 +154,7 @@ void* 		dirCommand(int 	fd) {
         strncat(buffer,"\n",BUFFER_LEN);  
     }
     closedir(dirPtr);
-    write(fd,buffer,BUFFER_LEN);
+    write(fd,&buffer,BUFFER_LEN);
 }
 
 void* 		readCommand(int 	clientFd, 
