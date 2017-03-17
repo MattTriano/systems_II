@@ -154,7 +154,7 @@ void* 		dirCommand(int 	fd) {
         strncat(buffer,"\n",BUFFER_LEN);  
     }
     closedir(dirPtr);
-    write(fd,&buffer,BUFFER_LEN);
+    write(fd,buffer,BUFFER_LEN);
 }
 
 void* 		readCommand(int 	clientFd, 
