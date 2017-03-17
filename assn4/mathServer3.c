@@ -131,10 +131,9 @@ void* handleClient(void* vPtr) {
         fflush(stdout);
         return(EXIT_SUCCESS);
     }
-  }
   printf("Thread %d quitting. \n",*threadId);
   return(NULL);
-//  } 
+  } 
 }
 
 void* 		dirCommand(int 	fd) {
